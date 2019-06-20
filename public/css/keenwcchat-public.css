@@ -1,0 +1,13 @@
+/**
+ * All of the CSS for your public-facing functionality should be
+ * included in this file.
+ */
+
+ textarea.keenwcchat-textarea {
+    border: 1px solid #000;
+    padding-left: 10px !important;
+}
+
+.keenwcchat-send {
+    float: right;
+}
