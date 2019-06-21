@@ -32,6 +32,8 @@ class Load_Scripts_Styles {
 		$this->plugin_name = $plugin_name;
 		$this->version = $version;
 
+		$this->functions = new Keenwcchat_Functions($this->plugin_name, $this->version);
+
 	}
 
 	/**
@@ -40,9 +42,9 @@ class Load_Scripts_Styles {
 	 * @since    1.0.0
 	 */
 	public function enqueue_styles() {
-		// if(is_view_order_page() || $this->is_thankyou_page()){
+		if(is_view_order_page() || $this->functions->is_thankyou_page() || $this->functions->is_order_edit_page()){
 			wp_enqueue_style( $this->plugin_name, plugin_dir_url( __DIR__ ) . 'assets/css/keenwcchat-style.css', array(), $this->version, 'all' );
-		// }
+		}
 	}
 
 	/**
@@ -51,21 +53,20 @@ class Load_Scripts_Styles {
 	 * @since    1.0.0
 	 */
 	public function enqueue_scripts() {
-		// if(is_view_order_page() || $this->is_thankyou_page()){
+		if(is_view_order_page() || $this->functions->is_thankyou_page() || $this->functions->is_order_edit_page()){
 			wp_enqueue_script( $this->plugin_name, plugin_dir_url( __DIR__ ) . 'assets/js/keenwcchat-scripts.js', array( 'jquery' ), $this->version, false );
 			// localize necessary data
 			wp_localize_script($this->plugin_name, 'keenwcchat', $this->localize_data());
-		// }
+		}
     }
     
     public function localize_data(){
 		global $wp;
 		$orderId = $wp->query_vars['view-order'] ? $wp->query_vars['view-order'] : $wp->query_vars['order-received'];
 		return [
-			'orderId' => $orderId
+			'orderId' => $orderId,
+			'ajax' 	  => admin_url( 'admin-ajax.php' ),
 		];
 	}
-
-
 
 }

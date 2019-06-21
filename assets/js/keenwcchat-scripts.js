@@ -2,6 +2,15 @@
 	'use strict';
 
 	$( window ).load(function() {
+
+		$("#keenwcchat-message").keypress(function (e) {
+			if(e.which == 13 && !e.shiftKey) {        
+				$(this).closest("form").submit();
+				e.preventDefault();
+				return false;
+			}
+		});
+
 		$('#keenwcchat-message').on('submit', function(e){
 			e.preventDefault();
 			var messageBox = $(this).find('textarea'),
@@ -10,7 +19,7 @@
 			$(this).trigger('reset');
 			$.ajax({
 				type: 'post',
-				url: woocommerce_params.ajax_url,
+				url: keenwcchat.ajax,
 				data: {
 				  action: 'keenwcchat_push_message',
 				  message: messageTxt,
@@ -41,7 +50,7 @@
 		console.log(displayed);
 		$.ajax({
 			type: 'post',
-			url: woocommerce_params.ajax_url,
+			url: keenwcchat.ajax,
 			data: {
 			  action: 'keenwcchat_load_chat',
 			  orderId: keenwcchat.orderId,
@@ -61,7 +70,7 @@
 	setInterval(function(){
 		console.log('requesting chat history')
 		loadChat();
-	}, 3000);
+	}, 5000);
 
 	loadChat();
 		

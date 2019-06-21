@@ -30,21 +30,32 @@ class Keenwcchat_Functions {
 	public function __construct( $plugin_name, $version ) {
 		$this->plugin_name = $plugin_name;
 		$this->version = $version;
-    }
-    
+	}
+	
+    /*
+	 * rendering message box frontend
+	*/
 	public function keenwcchat_message_box(){
-
-		echo '<pre>';
-		print_r(get_post_meta(842, 'order_chat', true));
-		echo '</pre>';
 		?>
-		<div id="display-chat" data-displayed="0"></div>
-		<form id="keenwcchat-message">
-			<textarea class="keenwcchat-textarea" name="message" placeholder="Type Message" style="width: 100%;"></textarea>
-			<input name="submit" type="submit" class="keenwcchat-send"  value="Send message">
-		</form>
+		<div class="keenwcchat">
+			<div id="display-chat"></div>
+			<form id="keenwcchat-message">
+				<textarea class="keenwcchat-textarea" name="message" placeholder="Type Message" style="width: 100%;"></textarea>
+				<input name="submit" type="submit" class="keenwcchat-send"  value="Send message">
+			</form>
+		</div>
 		<?php
 	}
+
+	/*
+	 * rendering meta box in orders for convos
+	*/
+	function keenwcchat_admin_message_box() {
+		add_meta_box( 'orders_convo', 'Conversation',
+				array($this,'keenwcchat_message_box'),
+				'shop_order', 'side', 'low');
+	}
+
 
 	public function customerId($orderId){
 		$order = wc_get_order( $orderId );
@@ -55,6 +66,10 @@ class Keenwcchat_Functions {
 	public function is_thankyou_page(){
 		global $wp;
 		return (is_checkout() && !empty( $wp->query_vars['order-received']));
+	}
+
+	public function is_order_edit_page(){
+		return ('shop_order' === get_post_type($_GET['post'])) && ( 'edit' == $_GET['action']);
 	}
 
 	public function keenwcchat_chat_basic_data($order_id){

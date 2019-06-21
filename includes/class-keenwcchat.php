@@ -44,7 +44,9 @@ class Keenwcchat {
 		// update chat history
 		$this->loader->add_action( 'wp_ajax_keenwcchat_push_message', $functions, 'keenwcchat_push_message' );
 		// load chat history
-		$this->loader->add_action( 'wp_ajax_keenwcchat_load_chat', $functions, 'keenwcchat_load_chat' );
+        $this->loader->add_action( 'wp_ajax_keenwcchat_load_chat', $functions, 'keenwcchat_load_chat' );
+        // load chat widget for seller
+		$this->loader->add_action( 'admin_init', $functions, 'keenwcchat_admin_message_box' );
     }
 
     public function run() {
