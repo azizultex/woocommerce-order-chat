@@ -39,10 +39,10 @@ class Keenwcchat_Functions {
 		?>
 		<div class="keenwcchat">
 			<div id="display-chat"></div>
-			<form id="keenwcchat-message">
+			<div id="keenwcchat-message">
 				<textarea class="keenwcchat-textarea" name="message" placeholder="Type Message" style="width: 100%;"></textarea>
-				<input name="submit" type="submit" class="keenwcchat-send"  value="Send message">
-			</form>
+				<a href="#" class="keenwcchat-send">Send message</a>
+			</div>
 		</div>
 		<?php
 	}

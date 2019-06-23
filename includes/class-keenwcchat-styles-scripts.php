@@ -62,7 +62,11 @@ class Load_Scripts_Styles {
     
     public function localize_data(){
 		global $wp;
-		$orderId = $wp->query_vars['view-order'] ? $wp->query_vars['view-order'] : $wp->query_vars['order-received'];
+		if(is_admin() && $this->functions->is_order_edit_page()){
+			$orderId = intval($_GET['post']);
+		} else {
+			$orderId = $wp->query_vars['view-order'] ? $wp->query_vars['view-order'] : $wp->query_vars['order-received'];
+		}
 		return [
 			'orderId' => $orderId,
 			'ajax' 	  => admin_url( 'admin-ajax.php' ),

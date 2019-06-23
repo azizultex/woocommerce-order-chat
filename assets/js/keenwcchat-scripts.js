@@ -3,20 +3,21 @@
 
 	$( window ).load(function() {
 
-		$("#keenwcchat-message").keypress(function (e) {
-			if(e.which == 13 && !e.shiftKey) {        
-				$(this).closest("form").submit();
-				e.preventDefault();
+		$(".keenwcchat-textarea").keypress(function (e) {
+			if(e.which == 13 && !e.shiftKey) {
+				e.preventDefault();       
+				$(this).siblings("keenwcchat-send").trigger('click');
 				return false;
 			}
 		});
 
-		$('#keenwcchat-message').on('submit', function(e){
+		$('.keenwcchat-send').on('click', function(e){
 			e.preventDefault();
-			var messageBox = $(this).find('textarea'),
+			var messageBox = $(this).siblings('textarea'),
 				messageTxt	   = messageBox.val();
 			console.log('messageBox', messageBox.val());
-			$(this).trigger('reset');
+			// reset the textarea field
+			$(messageBox).val('');
 			$.ajax({
 				type: 'post',
 				url: keenwcchat.ajax,
