@@ -6,7 +6,7 @@
 		$(".keenwcchat-textarea").keypress(function (e) {
 			if(e.which == 13 && !e.shiftKey) {
 				e.preventDefault();       
-				$(this).siblings("keenwcchat-send").trigger('click');
+				$(this).siblings(".keenwcchat-send").trigger('click');
 				return false;
 			}
 		});
@@ -31,18 +31,24 @@
 				},
 				success: function (resp) {
 					console.log(resp);
-					// showChat(resp);
+					showChat(resp);
 				},
 			})
 		});
 
 	// load the messages to show
 	function showChat(history){
+		var displayed = $('#display-chat li').length
+		console.log('history', history);
 		var viewMessage = '';
 		history.forEach(chat => {
 			viewMessage += '<li>' + chat.text + '</li>';
 		});
-		$('#display-chat').append($(viewMessage).wrap('<ul></ul>'));
+		if( displayed === 0 ){
+			$('#display-chat').append('<ul>' + viewMessage + '</ul>');
+		} else {
+			$('#display-chat').append(viewMessage);
+		}
 	}
 
 	// request for chat history
@@ -67,12 +73,41 @@
 		})
 	}
 
+	$('.keenwcchat-textarea').on('focus', function(e){
+		$.post(keenwcchat.ajax, { action: 'keenwcchat_typing' }, function(resp){
+			console.log(resp);
+		});
+	});
+
+	$('.keenwcchat-textarea').on('blur', function(e){
+		$.post(keenwcchat.ajax, { action: 'keenwcchat_not_typing' }, function(resp){
+			console.log(resp);
+		});
+	});
+
+	function getTypingStatus(){
+		$.post(keenwcchat.ajax, { action: 'get_typing_status' }, function(resp){
+			if(resp.typing){
+				$('.typing-status').text('Typing...')
+			} else {
+				$('.typing-status').text('');
+			}
+		});
+	}
+
 	// refresh chat every seconds
 	setInterval(function(){
 		console.log('requesting chat history')
 		loadChat();
 	}, 5000);
 
+	// keep updating typing status
+	setInterval(function(){
+		console.log('requesting typing status')
+		getTypingStatus();
+	}, 2000);
+
+	// first load message history
 	loadChat();
 		
 });

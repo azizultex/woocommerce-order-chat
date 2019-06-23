@@ -40,6 +40,7 @@ class Keenwcchat_Functions {
 		<div class="keenwcchat">
 			<div id="display-chat"></div>
 			<div id="keenwcchat-message">
+				<p class="typing-status"></p>
 				<textarea class="keenwcchat-textarea" name="message" placeholder="Type Message" style="width: 100%;"></textarea>
 				<a href="#" class="keenwcchat-send">Send message</a>
 			</div>
@@ -72,6 +73,11 @@ class Keenwcchat_Functions {
 		return ('shop_order' === get_post_type($_GET['post'])) && ( 'edit' == $_GET['action']);
 	}
 
+	public function is_customer_or_subscriber($id){
+		$user = get_userdata( $id );
+		return !empty(array_intersect(['customer', 'subscriber'], $user->roles));
+	}
+
 	public function keenwcchat_chat_basic_data($order_id){
 		$customerId = $this->customerId($order_id);
 		$chat_data = [
@@ -94,20 +100,22 @@ class Keenwcchat_Functions {
 		$message = $_POST['message'];
 		$orderId = intval($_POST['orderId']);
 		$chat_history = get_post_meta($orderId, 'order_chat', true);
-
+		$current_user = wp_get_current_user();
+		$is_cus_sub = $this->is_customer_or_subscriber($current_user->ID);
 		// push new chat
-		$chat_history['chat'][] = [
-			'customer' => true,
+		$new_chat = [
+			'customer' => $is_cus_sub,
 			'text'	   => $message,
 			'time'	   => time(),
 		];
+		$chat_history['chat'][] = $new_chat;
 
 		// update the chat to db
 		// $chat_data['displayed'] = count($chat_data['chat']);
 		update_post_meta($orderId, 'order_chat', $chat_history);
 
 		// send json chat history to js
-		wp_send_json($chat_history);
+		wp_send_json(array($new_chat));
 
 		exit;
 	}
@@ -126,6 +134,27 @@ class Keenwcchat_Functions {
 
 		// slice new chat to send 
 		wp_send_json($send_history);
+		exit;
+	}
+
+	public function keenwcchat_typing(){
+		$user = wp_get_current_user();
+		set_transient('keenwcchat_typing_' . $user->ID, true, 120); 
+		wp_send_json('typing');
+		exit;
+	}
+
+	public function keenwcchat_not_typing(){
+		$user = wp_get_current_user();
+		delete_transient('keenwcchat_typing_' . $user->ID);
+		wp_send_json('not typing. transient deleted.');
+		exit;
+	}
+
+	public function get_typing_status(){
+		$user = wp_get_current_user();
+		$status = get_transient('keenwcchat_typing_' . $user->ID);
+		wp_send_json(['typing' => $status]);
 		exit;
 	}
 

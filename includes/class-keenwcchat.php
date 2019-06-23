@@ -43,8 +43,19 @@ class Keenwcchat {
 		$this->loader->add_action( 'woocommerce_new_order', $functions, 'keenwcchat_chat_basic_data' );
 		// update chat history
 		$this->loader->add_action( 'wp_ajax_keenwcchat_push_message', $functions, 'keenwcchat_push_message' );
+		$this->loader->add_action( 'wp_ajax_nopriv_keenwcchat_push_message', $functions, 'keenwcchat_push_message' );
 		// load chat history
         $this->loader->add_action( 'wp_ajax_keenwcchat_load_chat', $functions, 'keenwcchat_load_chat' );
+        $this->loader->add_action( 'wp_ajax_nopriv_keenwcchat_load_chat', $functions, 'keenwcchat_load_chat' );
+        // update typing
+        $this->loader->add_action( 'wp_ajax_keenwcchat_typing', $functions, 'keenwcchat_typing' );
+        $this->loader->add_action( 'wp_ajax_nopriv_keenwcchat_typing', $functions, 'keenwcchat_typing' );
+        // update not typing
+        $this->loader->add_action( 'wp_ajax_keenwcchat_not_typing', $functions, 'keenwcchat_not_typing' );
+        $this->loader->add_action( 'wp_ajax_nopriv_keenwcchat_not_typing', $functions, 'keenwcchat_not_typing' );
+        // get typing status
+        $this->loader->add_action( 'wp_ajax_get_typing_status', $functions, 'get_typing_status' );
+        $this->loader->add_action( 'wp_ajax_nopriv_get_typing_status', $functions, 'get_typing_status' );
         // load chat widget for seller
 		$this->loader->add_action( 'admin_init', $functions, 'keenwcchat_admin_message_box' );
     }
