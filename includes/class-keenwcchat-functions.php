@@ -36,6 +36,10 @@ class Keenwcchat_Functions {
 	 * rendering message box frontend
 	*/
 	public function keenwcchat_message_box(){
+
+		// echo '<pre>';
+		// print_r(get_post_meta(847, 'order_chat', true));
+		// echo '</pre>';
 		?>
 		<div class="keenwcchat">
 			<div id="display-chat"></div>
@@ -56,8 +60,7 @@ class Keenwcchat_Functions {
 				array($this,'keenwcchat_message_box'),
 				'shop_order', 'side', 'low');
 	}
-
-
+	
 	public function customerId($orderId){
 		$order = wc_get_order( $orderId );
 		// $user = $order->get_user();
@@ -76,6 +79,11 @@ class Keenwcchat_Functions {
 	public function is_customer_or_subscriber($id){
 		$user = get_userdata( $id );
 		return !empty(array_intersect(['customer', 'subscriber'], $user->roles));
+	}
+
+	public function is_admin_or_shop_manager($id){
+		$user = get_userdata( $id );
+		return !empty(array_intersect(['shop_manager', 'administrator'], $user->roles));
 	}
 
 	public function keenwcchat_chat_basic_data($order_id){
@@ -100,23 +108,21 @@ class Keenwcchat_Functions {
 		$message = $_POST['message'];
 		$orderId = intval($_POST['orderId']);
 		$chat_history = get_post_meta($orderId, 'order_chat', true);
-		$current_user = wp_get_current_user();
-		$is_cus_sub = $this->is_customer_or_subscriber($current_user->ID);
+		$user = wp_get_current_user();
+		// $is_cus_sub = $this->is_customer_or_subscriber($user->ID);
 		// push new chat
 		$new_chat = [
-			'customer' => $is_cus_sub,
-			'text'	   => $message,
-			'time'	   => time(),
+			'user' 	 => $user->ID,
+			'text'	 => $message,
+			'time'	 => time(),
 		];
 		$chat_history['chat'][] = $new_chat;
 
 		// update the chat to db
-		// $chat_data['displayed'] = count($chat_data['chat']);
 		update_post_meta($orderId, 'order_chat', $chat_history);
 
 		// send json chat history to js
 		wp_send_json(array($new_chat));
-
 		exit;
 	}
 
@@ -129,8 +135,6 @@ class Keenwcchat_Functions {
 
 		// track the history displayed so far
 		$send_history = array_slice($chat_history['chat'], $displayed);
-		// $chat_history['displayed'] = count($chat_history['chat']);
-		// update_post_meta($orderId, 'order_chat', $chat_history);
 
 		// slice new chat to send 
 		wp_send_json($send_history);

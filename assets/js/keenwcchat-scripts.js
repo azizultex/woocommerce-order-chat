@@ -38,16 +38,18 @@
 
 	// load the messages to show
 	function showChat(history){
-		var displayed = $('#display-chat li').length
-		console.log('history', history);
+		var displayed = $('#display-chat li').length;
+		console.log('displayed', displayed);
 		var viewMessage = '';
 		history.forEach(chat => {
-			viewMessage += '<li>' + chat.text + '</li>';
+			var user = keenwcchat.user == chat.user ? 'sent' : 'replies';
+			var image = keenwcchat.user == chat.user ? keenwcchat.user_img : keenwcchat.seller_img;
+			viewMessage += '<li class="'+ user +'"><img src="'+ image +'" alt><p>' + chat.text + '</p></li>';
 		});
 		if( displayed === 0 ){
 			$('#display-chat').append('<ul>' + viewMessage + '</ul>');
 		} else {
-			$('#display-chat').append(viewMessage);
+			$('#display-chat ul').append(viewMessage);
 		}
 	}
 
