@@ -73,7 +73,12 @@ class Keenwcchat_Functions {
 	}
 
 	public function is_order_edit_page(){
-		return ('shop_order' === get_post_type($_GET['post'])) && ( 'edit' == $_GET['action']);
+		if(is_admin() && ('shop_order' === get_post_type($_GET['post'])) && ( 'edit' == $_GET['action'])){
+			// track the seller id
+			update_post_meta(intval($_GET['post']), 'seller_id', get_current_user_id());
+			return true;
+		}
+		return false;
 	}
 
 	public function is_customer_or_subscriber($id){

@@ -1,31 +1,107 @@
-textarea.keenwcchat-textarea {
-    border: 1px solid #000;
+.keenwcchat {
+    margin: 25px 0;
+}
+#keenwcchat-message {
+    width: 90%;
+    margin-left: 5%;
+}
+#keenwcchat-message textarea {
+    background: rgba(224, 224, 224,0.7);
     padding-left: 10px !important;
 }
-.keenwcchat-send {
-    float: right;
+
+#display-chat ul {
+    list-style: none;
+    margin: 0;
+    padding:0;
 }
-.keenwcchat #display-chat ul li {
+#display-chat ul li {
     display: inline-block;
+    position: relative;
     clear: both;
-    float: left;
-    margin: 15px 15px 5px 15px;
-    width: calc(100% - 25px);
+    width: 100%;
     font-size: 0.9em;
 }
-
-.keenwcchat #display-chat ul li img {
-    height: 50px;
-    width: 50px;
+#display-chat ul li img {
+    position: absolute;
+    height: 25px;
+    width: 25px;
     border-radius: 50%;
+    z-index: 99;
+}
+#display-chat ul li p {
+    width: 90%;
+    padding: 5px 10px;
+    margin-bottom: 10px;
+    margin-left: 5%;
+    position: relative;
+    border-radius: 5px;
+}
+ #display-chat ul li.sent {
 }
 
-.keenwcchat #display-chat ul li.sent p {
-    background: #435f7a;
-    color: #f5f5f5;
+#display-chat ul li.sent img {
+    right: 0;
 }
-
-.keenwcchat #display-chat ul li.replies p {
-    background: #f5f5f5;
+#display-chat ul li.sent p {
+    background: rgba(224, 224, 224,1);
+    margin-right: 14px;
+}
+#display-chat ul li.replies {
+}
+#display-chat ul li.replies p {
+    background: rgba(224, 224, 224,0.4);
+}
+#display-chat ul li.replies img {
+    left: 0;
+}
+#keenwcchat-message .typing-status {
+    margin-bottom: 2px;
+    font-size: 0.8em;
+}
+#keenwcchat-message .keenwcchat-send {
     float: right;
+    text-decoration: none !important;
+    background: #000;
+    padding: 10px;
+    color: #FFF;
+    margin: 5px 0;
+}
+
+#display-chat ul li:first-child:after {}
+
+#display-chat ul li.replies + li.sent p:after,
+#display-chat ul li.sent + li.replies p:after {
+
+}
+#display-chat ul li.replies + li.sent p:after {
+    content: '';
+    position: absolute;
+    top: 8px;
+    right: 0;
+    width: 0;
+    height: 0;
+    border: 12px solid transparent;
+    border-left-color: rgba(224, 224, 224,0.7);
+    border-right: 0;
+    border-top: 0;
+    margin-bottom: 0;
+    margin-right: -5px;
+    transform: rotate(134deg);
+    z-index: 999;
+}
+#display-chat ul li.sent + li.replies p:after  {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 0;
+    border: 12px solid transparent;
+    border-left-color: rgba(224, 224, 224,1);
+    border-right: 0;
+    border-bottom: 0;
+    margin-top: 8px;
+    margin-left: -5px;
+    transform: rotate(45deg);
 }

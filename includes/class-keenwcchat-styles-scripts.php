@@ -68,11 +68,12 @@ class Load_Scripts_Styles {
 			$orderId = $wp->query_vars['view-order'] ? $wp->query_vars['view-order'] : $wp->query_vars['order-received'];
 		}
 		$userId = $this->functions->customerId($orderId);
+		$sellerId = get_post_meta($orderId, 'seller_id', true);
 
 		return [
 			'user'	  => get_current_user_id(),
 			'user_img'=> get_avatar_url($userId),
-			'seller_img' => get_avatar_url(get_current_user_id()),
+			'seller_img' => get_avatar_url($sellerId),
 			'orderId' => $orderId,
 			'ajax' 	  => admin_url( 'admin-ajax.php' ),
 		];
