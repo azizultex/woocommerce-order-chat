@@ -39,12 +39,15 @@
 	// load the messages to show
 	function showChat(history){
 		var displayed = $('#display-chat li').length;
-		console.log('displayed', displayed);
-		var viewMessage = '';
+		var viewMessage = '', threadUser;
 		history.forEach(chat => {
-			var user = keenwcchat.user == chat.user ? 'sent' : 'replies';
-			var image = keenwcchat.user == chat.user ? keenwcchat.user_img : keenwcchat.seller_img;
-			viewMessage += '<li class="'+ user +'"><img src="'+ image +'" alt><p>' + chat.text + '</p></li>';
+			var sent_replies = keenwcchat.user == chat.user ? 'sent' : 'replies';
+			var image_url = keenwcchat.user == chat.user ? keenwcchat.user_img : keenwcchat.seller_img;
+			var image = threadUser !== chat.user ? '<img src="'+ image_url +'" alt></img>' : '';
+			viewMessage += '<li class="'+ sent_replies +'">'+ image +'<p>' + chat.text + '</p></li>';
+			console.log(threadUser, chat.user);
+			// store previous chat user
+			threadUser = chat.user;
 		});
 		if( displayed === 0 ){
 			$('#display-chat').append('<ul>' + viewMessage + '</ul>');
