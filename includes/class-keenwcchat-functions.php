@@ -98,11 +98,9 @@ class Keenwcchat_Functions {
 			'customer' => [ 
 				'id' => $customerId,
 				'online' => false,
-				'typing' => false,
 			],
 			'seller' => [
 				'online' => false,
-				'typing' => false,
 			],
 			'chat' => [],
 		];
@@ -161,8 +159,8 @@ class Keenwcchat_Functions {
 	}
 
 	public function get_typing_status(){
-		$user = wp_get_current_user();
-		$status = get_transient('keenwcchat_typing_' . $user->ID);
+		$chatingWith = intval($_POST['chatingWith']);
+		$status = get_transient('keenwcchat_typing_' . $chatingWith);
 		wp_send_json(['typing' => $status]);
 		exit;
 	}

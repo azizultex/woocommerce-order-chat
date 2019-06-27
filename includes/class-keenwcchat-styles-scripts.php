@@ -69,13 +69,15 @@ class Load_Scripts_Styles {
 		}
 		$userId = $this->functions->customerId($orderId);
 		$sellerId = get_post_meta($orderId, 'seller_id', true);
+		$chatingWith = is_admin() ? $userId : $sellerId; // used to get typing status
 
 		return [
-			'user'	  => get_current_user_id(),
-			'user_img'=> get_avatar_url($userId),
-			'seller_img' => get_avatar_url($sellerId),
-			'orderId' => $orderId,
-			'ajax' 	  => admin_url( 'admin-ajax.php' ),
+			'user'	  		=> get_current_user_id(),
+			'chatingWith' 	=> $chatingWith,
+			'user_img'		=> get_avatar_url($userId),
+			'seller_img' 	=> get_avatar_url($sellerId),
+			'orderId' 		=> $orderId,
+			'ajax' 	  		=> admin_url( 'admin-ajax.php' ),
 		];
 	}
 
