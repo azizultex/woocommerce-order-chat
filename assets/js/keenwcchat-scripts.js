@@ -1,6 +1,7 @@
+var frame;
 (function( $ ) {
-	'use strict';
-
+   'use strict';
+    
 	$( window ).load(function() {
 
 		$(".keenwcchat-textarea").keypress(function (e) {
@@ -11,10 +12,42 @@
 			}
 		});
 
+		$("button#upload_image").on("click",function(){
+		   
+			if(frame){
+				frame.open();
+				return false;
+			}
+           
+		   frame = wp.media({
+			 title:"Upload image",
+			 button:{
+				 text:"select image"
+			 },
+			 multiple:false
+		   });
+
+		    frame.on("select" , function(){
+			var attachment = frame.state().get("selection").first().toJSON();
+		    console.log(attachment);
+			$("#image_id").val(attachment.id);
+			$("#image_url").val(attachment.url);
+			
+			$("#display-chat ul").append(`<li class="sent"><a href="${attachment.url}" target="_blank">${attachment.filename}</a></li>`);
+			$( ".keenwcchat-send" ).trigger( "click" );
+		 }); 
+
+		  frame.open();
+		  return false;
+		   
+		});
+
 		$('.keenwcchat-send').on('click', function(e){
 			e.preventDefault();
 			var messageBox = $(this).siblings('textarea'),
-				messageTxt	   = messageBox.val();
+				messageTxt	   = messageBox.val(),
+				attachmentId  = $("#image_id").val();
+
 			console.log('messageBox', messageBox.val());
 			// reset the textarea field
 			$(messageBox).val('');
@@ -24,6 +57,7 @@
 				data: {
 				  action: 'keenwcchat_push_message',
 				  message: messageTxt,
+				  attachmentId: attachmentId,
 				  orderId: keenwcchat.orderId,
 				},
 				beforeSend: function (resp) {
@@ -44,7 +78,8 @@
 				var sent_replies = keenwcchat.user == chat.user ? 'sent' : 'replies';
 				var image_url = keenwcchat.user == chat.user ? keenwcchat.user_img : keenwcchat.seller_img;
 				var image = threadUser !== chat.user ? '<img src="'+ image_url +'" alt></img>' : '';
-				viewMessage += '<li class="'+ sent_replies +'">'+ image +'<p>' + chat.text + '</p></li>';
+				var attachmentId = chat.attachmentId ? chat.attachmentId : '';
+				viewMessage += '<li class="'+ sent_replies +'">'+ image +'<p>' + chat.text + '</p> ' + attachmentId + '</li>';
 				console.log(threadUser, chat.user);
 				// store previous chat user
 				threadUser = chat.user;

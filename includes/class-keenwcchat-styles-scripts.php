@@ -57,6 +57,8 @@ class Load_Scripts_Styles {
 			wp_enqueue_script( $this->plugin_name, plugin_dir_url( __DIR__ ) . 'assets/js/keenwcchat-scripts.js', array( 'jquery' ), $this->version, false );
 			// localize necessary data
 			wp_localize_script($this->plugin_name, 'keenwcchat', $this->localize_data());
+
+			wp_enqueue_media();
 		}
     }
     

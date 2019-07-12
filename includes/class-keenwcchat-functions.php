@@ -46,6 +46,11 @@ class Keenwcchat_Functions {
 			<div id="keenwcchat-message">
 				<p class="typing-status"></p>
 				<textarea class="keenwcchat-textarea" name="message" placeholder="Type Message" style="width: 100%;"></textarea>
+
+				<button id="upload_image">Upload image</button>
+				<input type="hidden" name="image_id" id="image_id" value=""/>
+				<input type="hidden" name="image_url" id="image_url" value=""/>
+				
 				<a href="#" class="keenwcchat-send">Send message</a>
 			</div>
 		</div>
@@ -75,7 +80,7 @@ class Keenwcchat_Functions {
 	public function is_order_edit_page(){
 		if(is_admin() && ('shop_order' === get_post_type($_GET['post'])) && ( 'edit' == $_GET['action'])){
 			// track the seller id
-			update_post_meta(intval($_GET['post']), 'seller_id', get_current_user_id());
+			update_post_meta(intval(isset($_GET['post'])), 'seller_id', get_current_user_id());
 			return true;
 		}
 		return false;
@@ -119,6 +124,9 @@ class Keenwcchat_Functions {
 			'text'	 => $message,
 			'time'	 => time(),
 		];
+		if(isset($_POST['attachmentId']) && !empty($_POST['attachmentId'])) {
+			$new_chat['attachmentId'] = intval($_POST['attachmentId']);
+		}
 		$chat_history['chat'][] = $new_chat;
 
 		// update the chat to db
