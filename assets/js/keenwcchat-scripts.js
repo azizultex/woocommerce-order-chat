@@ -4,6 +4,12 @@ var frame;
     
 	$( window ).load(function() {
 
+		// emoji one picker
+		$('.keenwcchat-textarea' ).emojionePicker({
+			type: 'unicode',
+		});
+
+		// send message on enter press
 		$(".keenwcchat-textarea").keypress(function (e) {
 			if(e.which == 13 && !e.shiftKey) {
 				e.preventDefault();       
@@ -12,6 +18,8 @@ var frame;
 			}
 		});
 
+
+		// upload media button trigger
 		$("button#upload_image").on("click",function(){
 		   
 			if(frame){
@@ -29,12 +37,12 @@ var frame;
 
 		    frame.on("select" , function(){
 			var attachment = frame.state().get("selection").first().toJSON();
-		    console.log(attachment);
-			$("#image_id").val(attachment.id);
-			$("#image_url").val(attachment.url);
-			
-			$("#display-chat ul").append(`<li class="sent"><a href="${attachment.url}" target="_blank">${attachment.filename}</a></li>`);
-			$( ".keenwcchat-send" ).trigger( "click" );
+			// $("#image_id").val(attachment.id)
+			var attachmentData = { id: attachment.id, url: attachment.url, filename: attachment.filename}
+			$("#attachment").val(JSON.stringify(attachmentData));
+			$("#upload_image").after('<a href="' + attachment.url + '" target="_blank">' + attachment.filename + '</a>');
+			// submit on media file selected? 
+			// $( ".keenwcchat-send" ).trigger( "click" );
 		 }); 
 
 		  frame.open();
@@ -42,11 +50,12 @@ var frame;
 		   
 		});
 
+		// send message on send button click
 		$('.keenwcchat-send').on('click', function(e){
 			e.preventDefault();
-			var messageBox = $(this).siblings('textarea'),
+			var messageBox = $(this).siblings().find('textarea') || $(this).siblings('textarea'),
 				messageTxt	   = messageBox.val(),
-				attachmentId  = $("#image_id").val();
+				attachment  = $(this).siblings('#attachment').val();
 
 			console.log('messageBox', messageBox.val());
 			// reset the textarea field
@@ -57,14 +66,14 @@ var frame;
 				data: {
 				  action: 'keenwcchat_push_message',
 				  message: messageTxt,
-				  attachmentId: attachmentId,
+				  attachment: attachment,
 				  orderId: keenwcchat.orderId,
 				},
 				beforeSend: function (resp) {
-				  console.log("sending ", messageTxt, keenwcchat.orderId)
+				  console.log("sending ", messageTxt, keenwcchat.orderId, attachment)
 				},
 				success: function (resp) {
-					console.log(resp);
+					// console.log(resp);
 					showChat(resp);
 				},
 			})
@@ -78,9 +87,10 @@ var frame;
 				var sent_replies = keenwcchat.user == chat.user ? 'sent' : 'replies';
 				var image_url = keenwcchat.user == chat.user ? keenwcchat.user_img : keenwcchat.seller_img;
 				var image = threadUser !== chat.user ? '<img src="'+ image_url +'" alt></img>' : '';
-				var attachmentId = chat.attachmentId ? chat.attachmentId : '';
-				viewMessage += '<li class="'+ sent_replies +'">'+ image +'<p>' + chat.text + '</p> ' + attachmentId + '</li>';
-				console.log(threadUser, chat.user);
+				var attachment = chat.attachment ? JSON.parse(chat.attachment) : '';
+				attachment = attachment ? '<a href="' + attachment.url + '" target="__blank">'+ attachment.filename +'</a>': '';
+				viewMessage += '<li class="'+ sent_replies +'">'+ image +'<p>' + chat.text + attachment + '</p></li>';
+				// console.log(threadUser, chat.user);
 				// store previous chat user
 				threadUser = chat.user;
 			});
@@ -115,13 +125,13 @@ var frame;
 
 		$('.keenwcchat-textarea').on('focus', function(e){
 			$.post(keenwcchat.ajax, { action: 'keenwcchat_typing' }, function(resp){
-				console.log(resp);
+				// console.log(resp);
 			});
 		});
 
 		$('.keenwcchat-textarea').on('blur', function(e){
 			$.post(keenwcchat.ajax, { action: 'keenwcchat_not_typing' }, function(resp){
-				console.log(resp);
+				// console.log(resp);
 			});
 		});
 
@@ -137,13 +147,13 @@ var frame;
 
 		// refresh chat every seconds
 		setInterval(function(){
-			console.log('requesting chat history')
+			// console.log('requesting chat history')
 			loadChat();
 		}, 5000);
 
 		// keep updating typing status
 		setInterval(function(){
-			console.log('requesting typing status')
+			// console.log('requesting typing status')
 			getTypingStatus();
 		}, 2000);
 

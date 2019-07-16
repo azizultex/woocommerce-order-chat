@@ -5,6 +5,9 @@
     width: 90%;
     margin-left: 5%;
 }
+#keenwcchat-message .keenwcchat_box {
+    position: relative;
+}
 #keenwcchat-message textarea {
     background: rgba(224, 224, 224,0.7);
     padding-left: 10px !important;
@@ -22,7 +25,7 @@
     width: 100%;
     font-size: 0.9em;
 }
-#display-chat ul li img {
+#display-chat ul li img:not(.emoji) {
     position: absolute;
     height: 25px;
     width: 25px;
@@ -40,7 +43,7 @@
  #display-chat ul li.sent {
 }
 
-#display-chat ul li.sent img {
+#display-chat ul li.sent img:not(.emoji) {
     right: 0;
 }
 #display-chat ul li.sent p {
@@ -52,7 +55,7 @@
 #display-chat ul li.replies p {
     background: rgba(224, 224, 224,0.4);
 }
-#display-chat ul li.replies img {
+#display-chat ul li.replies img:not(.emoji) {
     left: 0;
 }
 #keenwcchat-message .typing-status {
@@ -104,4 +107,12 @@
     margin-top: 8px;
     margin-left: -5px;
     transform: rotate(45deg);
+}
+
+.keenwcchat .emojipicker {
+    height: 44px;
+    width: 44px;
+    background-color: rgb(238, 238, 238);
+    background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiP…4xMiwxODIuMDM0DQoJYzAsMCw2OS43OTMsNzAuNzA0LDE0MC40OTgsMCIvPg0KPC9zdmc+DQo=) center center no-repeat;
+    background-size: 60%;
 }

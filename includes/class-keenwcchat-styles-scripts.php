@@ -44,6 +44,8 @@ class Load_Scripts_Styles {
 	public function enqueue_styles() {
 		if(is_view_order_page() || $this->functions->is_thankyou_page() || $this->functions->is_order_edit_page()){
 			wp_enqueue_style( $this->plugin_name, plugin_dir_url( __DIR__ ) . 'assets/css/keenwcchat-style.css', array(), $this->version, 'all' );
+			// emojione picker
+			wp_enqueue_style( 'emoji-one-picker', plugin_dir_url( __DIR__ ) . 'assets/css/emojione.picker.css', array(), null, 'all' );
 		}
 	}
 
@@ -54,6 +56,9 @@ class Load_Scripts_Styles {
 	 */
 	public function enqueue_scripts() {
 		if(is_view_order_page() || $this->functions->is_thankyou_page() || $this->functions->is_order_edit_page()){
+			// emojione picker
+			wp_enqueue_script( 'emoji-one-picker', plugin_dir_url( __DIR__ ) . 'assets/js/emojione.picker.min.js', array( 'jquery'), null, false );
+			// keenchat scripts
 			wp_enqueue_script( $this->plugin_name, plugin_dir_url( __DIR__ ) . 'assets/js/keenwcchat-scripts.js', array( 'jquery' ), $this->version, false );
 			// localize necessary data
 			wp_localize_script($this->plugin_name, 'keenwcchat', $this->localize_data());

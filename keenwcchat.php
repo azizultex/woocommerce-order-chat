@@ -15,8 +15,11 @@
 require plugin_dir_path( __FILE__ ) . 'includes/class-keenwcchat.php';
 
 function run_keenwcchat() {
+    // load plugin for logged in users only
+    if(!is_user_logged_in()){
+        return;
+    }
     $plugin = new Keenwcchat();
     $plugin->run();
 }
-
 add_action('plugins_loaded', 'run_keenwcchat');

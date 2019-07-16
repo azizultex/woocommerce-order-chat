@@ -36,21 +36,16 @@ class Keenwcchat_Functions {
 	 * rendering message box frontend
 	*/
 	public function keenwcchat_message_box(){
-
-		// echo '<pre>';
-		// print_r(get_post_meta(847, 'order_chat', true));
-		// echo '</pre>';
 		?>
 		<div class="keenwcchat">
 			<div id="display-chat"></div>
 			<div id="keenwcchat-message">
 				<p class="typing-status"></p>
-				<textarea class="keenwcchat-textarea" name="message" placeholder="Type Message" style="width: 100%;"></textarea>
-
+				<div class="keenwcchat_box">
+					<textarea class="keenwcchat-textarea"></textarea>
+				</div>
 				<button id="upload_image">Upload image</button>
-				<input type="hidden" name="image_id" id="image_id" value=""/>
-				<input type="hidden" name="image_url" id="image_url" value=""/>
-				
+				<input type="hidden" name="attachment" id="attachment" value=""/>
 				<a href="#" class="keenwcchat-send">Send message</a>
 			</div>
 		</div>
@@ -65,7 +60,7 @@ class Keenwcchat_Functions {
 				array($this,'keenwcchat_message_box'),
 				'shop_order', 'side', 'low');
 	}
-	
+
 	public function customerId($orderId){
 		$order = wc_get_order( $orderId );
 		// $user = $order->get_user();
@@ -124,8 +119,8 @@ class Keenwcchat_Functions {
 			'text'	 => $message,
 			'time'	 => time(),
 		];
-		if(isset($_POST['attachmentId']) && !empty($_POST['attachmentId'])) {
-			$new_chat['attachmentId'] = intval($_POST['attachmentId']);
+		if(isset($_POST['attachment']) && !empty($_POST['attachment'])) {
+			$new_chat['attachment'] = $_POST['attachment'];
 		}
 		$chat_history['chat'][] = $new_chat;
 

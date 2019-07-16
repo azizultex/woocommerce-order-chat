@@ -43,21 +43,20 @@ class Keenwcchat {
 		$this->loader->add_action( 'woocommerce_new_order', $functions, 'keenwcchat_chat_basic_data' );
 		// update chat history
 		$this->loader->add_action( 'wp_ajax_keenwcchat_push_message', $functions, 'keenwcchat_push_message' );
-		$this->loader->add_action( 'wp_ajax_nopriv_keenwcchat_push_message', $functions, 'keenwcchat_push_message' );
 		// load chat history
         $this->loader->add_action( 'wp_ajax_keenwcchat_load_chat', $functions, 'keenwcchat_load_chat' );
-        $this->loader->add_action( 'wp_ajax_nopriv_keenwcchat_load_chat', $functions, 'keenwcchat_load_chat' );
         // update typing
         $this->loader->add_action( 'wp_ajax_keenwcchat_typing', $functions, 'keenwcchat_typing' );
-        $this->loader->add_action( 'wp_ajax_nopriv_keenwcchat_typing', $functions, 'keenwcchat_typing' );
         // update not typing
         $this->loader->add_action( 'wp_ajax_keenwcchat_not_typing', $functions, 'keenwcchat_not_typing' );
-        $this->loader->add_action( 'wp_ajax_nopriv_keenwcchat_not_typing', $functions, 'keenwcchat_not_typing' );
         // get typing status
         $this->loader->add_action( 'wp_ajax_get_typing_status', $functions, 'get_typing_status' );
-        $this->loader->add_action( 'wp_ajax_nopriv_get_typing_status', $functions, 'get_typing_status' );
         // load chat widget for seller
-		$this->loader->add_action( 'admin_init', $functions, 'keenwcchat_admin_message_box' );
+        $this->loader->add_action( 'admin_init', $functions, 'keenwcchat_admin_message_box' );
+        // allow customers upload media on chat
+        $this->loader->add_action( 'admin_init', __CLASS__, 'allow_customers_upload_media' );
+        // filter only self media 
+        $this->loader->add_filter( 'ajax_query_attachments_args', __CLASS__, 'filter_to_self_media_only' );
     }
 
     public function run() {
@@ -66,6 +65,22 @@ class Keenwcchat {
         } else {
             add_action( 'admin_notices', array($this, 'keenwcchat_admin_notice') );
         }
+    }
+
+    // allow customers upload media on chat
+    function allow_customers_upload_media() {
+        $customer = get_role('customer');
+        $customer->add_cap('upload_files');
+        $customer->add_cap('edit_published_posts');
+        $customer->add_cap('edit_others_posts');
+    }
+
+    // filter only self media
+    public function filter_to_self_media_only($query){
+        // admins get to see everything
+        if ( ! current_user_can( 'manage_options' ) )
+            $query['author'] = get_current_user_id();
+        return $query;
     }
     
     // admin notice if wc not active
