@@ -53,24 +53,27 @@ var frame;
 		// send message on send button click
 		$('.keenwcchat-send').on('click', function(e){
 			e.preventDefault();
-			var messageBox = $(this).siblings().find('textarea') || $(this).siblings('textarea'),
-				messageTxt	   = messageBox.val(),
-				attachment  = $(this).siblings('#attachment').val();
+			var messageBox	=	$(this).siblings().find('textarea') || $(this).siblings('textarea'),
+				attachment	=	$(this).siblings('input[name=attachment]').val(),
+				messageData =	{
+					action: 'keenwcchat_push_message',
+					message: messageBox.val(),
+					attachment: attachment,
+					orderId: keenwcchat.orderId,
+				};
+			
+			console.log('messageData', messageData);
 
-			console.log('messageBox', messageBox.val());
 			// reset the textarea field
 			$(messageBox).val('');
+
+			// perform ajax for message update
 			$.ajax({
 				type: 'post',
 				url: keenwcchat.ajax,
-				data: {
-				  action: 'keenwcchat_push_message',
-				  message: messageTxt,
-				  attachment: attachment,
-				  orderId: keenwcchat.orderId,
-				},
+				data: messageData,
 				beforeSend: function (resp) {
-				  console.log("sending ", messageTxt, keenwcchat.orderId, attachment)
+				  console.log("sending ", messageData)
 				},
 				success: function (resp) {
 					// console.log(resp);
@@ -117,7 +120,7 @@ var frame;
 				console.log("load chat ", keenwcchat.orderId, displayed)
 				},
 				success: function (resp) {
-					console.log(resp);
+					console.log('success', resp);
 					showChat(resp);
 				},
 			})

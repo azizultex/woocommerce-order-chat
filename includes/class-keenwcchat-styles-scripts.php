@@ -64,6 +64,7 @@ class Load_Scripts_Styles {
 			wp_localize_script($this->plugin_name, 'keenwcchat', $this->localize_data());
 
 			wp_enqueue_media();
+
 		}
     }
     

@@ -38,7 +38,7 @@ class Keenwcchat_Functions {
 	public function keenwcchat_message_box(){
 		?>
 		<div class="keenwcchat">
-			<div id="display-chat"></div>
+			<div id="display-chat"><ul></ul></div>
 			<div id="keenwcchat-message">
 				<p class="typing-status"></p>
 				<div class="keenwcchat_box">
@@ -91,28 +91,30 @@ class Keenwcchat_Functions {
 		return !empty(array_intersect(['shop_manager', 'administrator'], $user->roles));
 	}
 
-	public function keenwcchat_chat_basic_data($order_id){
-		$customerId = $this->customerId($order_id);
-		$chat_data = [
-			'id' => $order_id,
-			'customer' => [ 
-				'id' => $customerId,
-				'online' => false,
-			],
-			'seller' => [
-				'online' => false,
-			],
-			'chat' => [],
-		];
-		update_post_meta($order_id, 'order_chat', $chat_data);
-	}
-
 	public function keenwcchat_push_message(){
 		$message = $_POST['message'];
 		$orderId = intval($_POST['orderId']);
-		$chat_history = get_post_meta($orderId, 'order_chat', true);
 		$user = wp_get_current_user();
+		$chat_history = get_post_meta($orderId, 'order_chat', true);
 		// $is_cus_sub = $this->is_customer_or_subscriber($user->ID);
+				
+		// update basic data structure if not already set
+		if(!isset($chat_history['chat'])){
+			$customerId = $this->customerId($orderId);
+			$chat_data = [
+				'id' => $orderId,
+				'customer' => [ 
+					'id' => $customerId,
+					'online' => false,
+				],
+				'seller' => [
+					'online' => false,
+				],
+				'chat' => [],
+			];
+			update_post_meta($orderId, 'order_chat', $chat_data);
+		}
+
 		// push new chat
 		$new_chat = [
 			'user' 	 => $user->ID,

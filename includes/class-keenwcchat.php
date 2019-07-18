@@ -39,8 +39,6 @@ class Keenwcchat {
     private function load_functions(){
         $functions = new Keenwcchat_Functions( $this->plugin_name, $this->version );
         $this->loader->add_action( 'woocommerce_order_details_before_order_table', $functions, 'keenwcchat_message_box' );
-		// push basic chat data on new order
-		$this->loader->add_action( 'woocommerce_new_order', $functions, 'keenwcchat_chat_basic_data' );
 		// update chat history
 		$this->loader->add_action( 'wp_ajax_keenwcchat_push_message', $functions, 'keenwcchat_push_message' );
 		// load chat history
@@ -68,7 +66,7 @@ class Keenwcchat {
     }
 
     // allow customers upload media on chat
-    function allow_customers_upload_media() {
+    static function allow_customers_upload_media() {
         $customer = get_role('customer');
         $customer->add_cap('upload_files');
         $customer->add_cap('edit_published_posts');

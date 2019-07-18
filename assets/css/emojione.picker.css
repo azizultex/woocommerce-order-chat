@@ -94,8 +94,8 @@
 	opacity: 0.4;
 	display:none;
 	cursor:pointer;
-    right: 0 !important;
-    top: 0 !important;
+    right: 3px !important;
+    top: 3px !important;
     left: auto !important;
 }
 

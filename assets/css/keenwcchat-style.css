@@ -41,19 +41,25 @@
     border-radius: 5px;
 }
  #display-chat ul li.sent {
+     text-align: right;
+     background: rgba(224, 224, 224,1);
 }
 
 #display-chat ul li.sent img:not(.emoji) {
     right: 0;
+    opacity: 0;
+}
+#display-chat ul li.replies + li.sent > img {
+    opacity: 1;
 }
 #display-chat ul li.sent p {
-    background: rgba(224, 224, 224,1);
     margin-right: 14px;
 }
 #display-chat ul li.replies {
+    background: rgba(224, 224, 224,0.4);
 }
 #display-chat ul li.replies p {
-    background: rgba(224, 224, 224,0.4);
+
 }
 #display-chat ul li.replies img:not(.emoji) {
     left: 0;
