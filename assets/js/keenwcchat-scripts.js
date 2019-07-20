@@ -4,23 +4,32 @@ var frame;
     
 	$( window ).load(function() {
 
+		var chatBox = $('#display-chat'),
+			textArea = $('.keenwcchat-textarea'),
+			uploadImage = $("#upload_image"),
+			attachmentID = $("#attachment"),
+			typeStatus = $('.typing-status'),
+			sendBtn = $('.keenwcchat-send'),
+			firstLoad = true;
+
 		// emoji one picker
-		$('.keenwcchat-textarea' ).emojionePicker({
+		textArea.emojionePicker({
 			type: 'unicode',
 		});
 
 		// send message on enter press
-		$(".keenwcchat-textarea").keypress(function (e) {
+		textArea.keypress(function (e) {
 			if(e.which == 13 && !e.shiftKey) {
-				e.preventDefault();       
-				$(this).siblings(".keenwcchat-send").trigger('click');
+				e.preventDefault();
+				sendBtn.trigger('click');
+				// console.log('send triggerd')
 				return false;
 			}
 		});
 
 
 		// upload media button trigger
-		$("button#upload_image").on("click",function(){
+		uploadImage.on("click",function(){
 		   
 			if(frame){
 				frame.open();
@@ -39,8 +48,8 @@ var frame;
 			var attachment = frame.state().get("selection").first().toJSON();
 			// $("#image_id").val(attachment.id)
 			var attachmentData = { id: attachment.id, url: attachment.url, filename: attachment.filename}
-			$("#attachment").val(JSON.stringify(attachmentData));
-			$("#upload_image").after('<a href="' + attachment.url + '" target="_blank">' + attachment.filename + '</a>');
+			attachmentID.val(JSON.stringify(attachmentData));
+			uploadImage.after('<a href="' + attachment.url + '" target="_blank">' + attachment.filename + '</a>');
 			// submit on media file selected? 
 			// $( ".keenwcchat-send" ).trigger( "click" );
 		 }); 
@@ -51,7 +60,7 @@ var frame;
 		});
 
 		// send message on send button click
-		$('.keenwcchat-send').on('click', function(e){
+		sendBtn.on('click', function(e){
 			e.preventDefault();
 			var messageBox	=	$(this).siblings().find('textarea') || $(this).siblings('textarea'),
 				attachment	=	$(this).siblings('input[name=attachment]').val(),
@@ -73,11 +82,12 @@ var frame;
 				url: keenwcchat.ajax,
 				data: messageData,
 				beforeSend: function (resp) {
-				  console.log("sending ", messageData)
+				//   console.log("sending ", messageData)
 				},
 				success: function (resp) {
 					// console.log(resp);
 					showChat(resp);
+					chatBox.scrollTop(chatBox[0].scrollHeight);
 				},
 			})
 		});
@@ -98,7 +108,7 @@ var frame;
 				threadUser = chat.user;
 			});
 			if( displayed === 0 ){
-				$('#display-chat').append('<ul>' + viewMessage + '</ul>');
+				chatBox.append('<ul>' + viewMessage + '</ul>');
 			} else {
 				$('#display-chat ul').append(viewMessage);
 			}
@@ -150,7 +160,6 @@ var frame;
 		// request for chat history
 		function loadChat(){
 			var displayed = $('#display-chat li').length;
-			// console.log(displayed);
 			$.ajax({
 				type: 'post',
 				url: keenwcchat.ajax,
@@ -160,22 +169,27 @@ var frame;
 				displayed: displayed,
 				},
 				beforeSend: function (resp) {
-				console.log("load chat ", keenwcchat.orderId, displayed)
+					// console.log("load chat ", keenwcchat.orderId, displayed)
 				},
 				success: function (resp) {
-					console.log('success', resp);
+					// console.log('success', resp);
 					showChat(resp);
+					// scroll down to last chat for first load only
+					if(firstLoad){
+						chatBox.scrollTop(chatBox[0].scrollHeight);
+						firstLoad = false;
+					}
 				},
 			})
 		}
 
-		$('.keenwcchat-textarea').on('focus', function(e){
+		textArea.on('focus', function(e){
 			$.post(keenwcchat.ajax, { action: 'keenwcchat_typing' }, function(resp){
 				// console.log(resp);
 			});
 		});
 
-		$('.keenwcchat-textarea').on('blur', function(e){
+		textArea.on('blur', function(e){
 			$.post(keenwcchat.ajax, { action: 'keenwcchat_not_typing' }, function(resp){
 				// console.log(resp);
 			});
@@ -184,9 +198,9 @@ var frame;
 		function getTypingStatus(){
 			$.post(keenwcchat.ajax, { action: 'get_typing_status', 'chatingWith': keenwcchat.chatingWith }, function(resp){
 				if(resp.typing){
-					$('.typing-status').text('Typing...')
+					typeStatus.text('Typing...')
 				} else {
-					$('.typing-status').text('');
+					typeStatus.text('');
 				}
 			});
 		}
@@ -207,6 +221,5 @@ var frame;
 		loadChat();
 			
 	});
-
-
+	
 })( jQuery );

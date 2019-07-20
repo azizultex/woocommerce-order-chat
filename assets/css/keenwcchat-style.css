@@ -12,8 +12,13 @@
     background: rgba(224, 224, 224,0.7);
     padding-left: 10px !important;
     width: 100%;
+    height: 100px;
 }
-
+#display-chat {
+    max-height: 400px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
 #display-chat ul {
     list-style: none;
     margin: 0;
