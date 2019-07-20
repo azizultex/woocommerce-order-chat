@@ -91,27 +91,26 @@ class Keenwcchat_Functions {
 		return !empty(array_intersect(['shop_manager', 'administrator'], $user->roles));
 	}
 
+	public function keenwcchat_chat_basic_data($order_id){
+		$customerId = $this->customerId($order_id);
+		$chat_data = [
+			'id' => $order_id,
+			'customer' => [ 
+				'id' => $customerId,
+			],
+			'seller' => [
+			],
+			'chat' => [],
+		];
+		update_post_meta($order_id, 'order_chat', $chat_data);
+	}
+
 	public function keenwcchat_push_message(){
 		$message = $_POST['message'];
 		$orderId = intval($_POST['orderId']);
 		$user = wp_get_current_user();
 		$chat_history = get_post_meta($orderId, 'order_chat', true);
 		// $is_cus_sub = $this->is_customer_or_subscriber($user->ID);
-				
-		// update basic data structure if not already set
-		if(!isset($chat_history['chat'])){
-			$customerId = $this->customerId($orderId);
-			$chat_data = [
-				'id' => $orderId,
-				'customer' => [ 
-					'id' => $customerId,
-				],
-				'seller' => [
-				],
-				'chat' => [],
-			];
-			update_post_meta($orderId, 'order_chat', $chat_data);
-		}
 
 		// push new chat
 		$new_chat = [
@@ -138,7 +137,12 @@ class Keenwcchat_Functions {
 
 		// retrieve database history
 		$chat_history = get_post_meta($orderId, 'order_chat', true);
-
+						
+		// update basic data structure if not already set
+		if(!isset($chat_history['chat'])){
+			$this->keenwcchat_chat_basic_data($orderId);
+		}
+		
 		// track the history displayed so far
 		$send_history = array_slice($chat_history['chat'], $displayed);
 
