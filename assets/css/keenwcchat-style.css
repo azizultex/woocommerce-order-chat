@@ -2,8 +2,8 @@
     margin: 25px 0;
 }
 #keenwcchat-message {
-    width: 90%;
-    margin-left: 5%;
+    clear: both;
+    padding-top: 5px;
 }
 #keenwcchat-message .keenwcchat_box {
     position: relative;
@@ -11,6 +11,7 @@
 #keenwcchat-message textarea {
     background: rgba(224, 224, 224,0.7);
     padding-left: 10px !important;
+    width: 100%;
 }
 
 #display-chat ul {
@@ -22,48 +23,57 @@
     display: inline-block;
     position: relative;
     clear: both;
-    width: 100%;
-    font-size: 0.9em;
-}
-#display-chat ul li img:not(.emoji) {
-    position: absolute;
-    height: 25px;
-    width: 25px;
-    border-radius: 50%;
-    z-index: 99;
+    font-size: 1em;
+    margin-bottom: 0;
+    width: 90%;
+    box-sizing: border-box;
+    padding:4px 10px;
 }
 #display-chat ul li p {
-    width: 90%;
-    padding: 5px 10px;
-    margin-bottom: 10px;
-    margin-left: 5%;
-    position: relative;
-    border-radius: 5px;
+    margin-top: 0;
+    margin-bottom: 0;
+    text-align: left;
+}
+#display-chat ul li p.chat_time {
+    font-size: 0.7em;
+    font-style: italic;
+}
+#display-chat ul li img:not(.emoji) {
+    height: 25px;
+    width: 25px;
+    border-radius: 500px;
+    z-index: 99;
+    margin-top: -10px;
 }
  #display-chat ul li.sent {
-     text-align: right;
-     background: rgba(224, 224, 224,1);
+    float: right;
+    background: rgba(224, 224, 224,1);
 }
 
 #display-chat ul li.sent img:not(.emoji) {
     right: 0;
-    opacity: 0;
+    display: none;
 }
 #display-chat ul li.replies + li.sent > img {
-    opacity: 1;
+    display: inline-block;
 }
-#display-chat ul li.sent p {
-    margin-right: 14px;
+#display-chat ul li.replies + li.sent {
+    text-align: right;
 }
+
 #display-chat ul li.replies {
     background: rgba(224, 224, 224,0.4);
 }
-#display-chat ul li.replies p {
 
-}
 #display-chat ul li.replies img:not(.emoji) {
     left: 0;
 }
+/* #display-chat ul li.sent p {
+    border-right: 1px solid;
+}
+#display-chat ul li.replies p {
+    border-left: 1px solid;
+} */
 #keenwcchat-message .typing-status {
     margin-bottom: 2px;
     font-size: 0.8em;
@@ -79,11 +89,15 @@
 
 #display-chat ul li:first-child:after {}
 
+#display-chat ul li.replies + li.sent,
+#display-chat ul li.sent + li.replies {
+    margin-top: 15px;
+}
 #display-chat ul li.replies + li.sent p:after,
 #display-chat ul li.sent + li.replies p:after {
 
 }
-#display-chat ul li.replies + li.sent p:after {
+/* #display-chat ul li.replies + li.sent p:after {
     content: '';
     position: absolute;
     top: 8px;
@@ -113,7 +127,7 @@
     margin-top: 8px;
     margin-left: -5px;
     transform: rotate(45deg);
-}
+} */
 
 .keenwcchat .emojipicker {
     height: 44px;

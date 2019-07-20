@@ -85,14 +85,14 @@ var frame;
 		// load the messages to show
 		function showChat(history){
 			var displayed = $('#display-chat li').length;
-			var viewMessage = '', threadUser;
+			var viewMessage = '', threadUser, history = history || [];
 			history.forEach(chat => {
 				var sent_replies = keenwcchat.user == chat.user ? 'sent' : 'replies';
 				var image_url = keenwcchat.user == chat.user ? keenwcchat.user_img : keenwcchat.seller_img;
 				var image = threadUser !== chat.user ? '<img src="'+ image_url +'" alt></img>' : '';
 				var attachment = chat.attachment ? JSON.parse(chat.attachment) : '';
 				attachment = attachment ? '<a href="' + attachment.url + '" target="__blank">'+ attachment.filename +'</a>': '';
-				viewMessage += '<li class="'+ sent_replies +'">'+ image +'<p>' + chat.text + attachment + '</p></li>';
+				viewMessage += '<li class="'+ sent_replies +'">'+image+'<p>'+ chat.text + attachment + '</p><p class="chat_time">'+ unixToJsTime(chat.time) +'</p></li>';
 				// console.log(threadUser, chat.user);
 				// store previous chat user
 				threadUser = chat.user;
@@ -104,10 +104,53 @@ var frame;
 			}
 		}
 
+		// unix timestamp to JavaScript
+		function unixToJsTime(ut){
+			var months_arr = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],
+				phpToJsTime = ut*1000,
+				dateObj = new Date(phpToJsTime),
+				timeDiff = new Date((+new Date - phpToJsTime) / 1000),
+				minute = 60,
+				hour = minute * 60,
+				day = hour * 24,
+				month = day * 30,
+				year = month * 12,
+				getYear = dateObj.getFullYear(),
+				getMonth = months_arr[dateObj.getMonth()],
+				getDay = dateObj.getDate(),
+				getHours = dateObj.getHours(), 
+				getMinutes = dateObj.getMinutes(),
+				ampm = getHours >= 12 ? 'PM' : 'AM',
+				hours = getHours % 12,
+				hours = hours ? hours : 12, // the hour '0' should be '12'
+				keenwcchatFormat = hours.toString().padStart(2, '0') + ':' + getMinutes.toString().padStart(2, '0') + ' ' + ampm;
+
+				// return time conditionally
+				if(timeDiff < 30 ){
+					return 'now';
+				} else if( timeDiff < minute ){
+					return timeDiff + ' seconds ago';
+				} else if( timeDiff < 2 * minute ){
+					return 'a minutes ago';
+				} else if( timeDiff < hour ){
+					return Math.floor(timeDiff / minute) + ' minutes ago.';
+				} else if( Math.floor(timeDiff / hour) == 1 ){
+					return '1 hour ago.';
+				} else if ( timeDiff < day ) {
+					return Math.floor(timeDiff / hour) + ' hours ago.';
+				} else if ( timeDiff < 2 * day ) {
+					return 'yesterday';
+				} else if( timeDiff < year ) {
+					return getMonth + ' ' + getDay + ' at ' + keenwcchatFormat;
+				} else {
+					return getMonth + ' ' + getDay + ', ' + getYear + ' at ' + keenwcchatFormat;
+				}
+		}
+
 		// request for chat history
 		function loadChat(){
 			var displayed = $('#display-chat li').length;
-			console.log(displayed);
+			// console.log(displayed);
 			$.ajax({
 				type: 'post',
 				url: keenwcchat.ajax,

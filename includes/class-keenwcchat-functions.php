@@ -38,7 +38,7 @@ class Keenwcchat_Functions {
 	public function keenwcchat_message_box(){
 		?>
 		<div class="keenwcchat">
-			<div id="display-chat"><ul></ul></div>
+			<div id="display-chat"></div>
 			<div id="keenwcchat-message">
 				<p class="typing-status"></p>
 				<div class="keenwcchat_box">
@@ -58,7 +58,7 @@ class Keenwcchat_Functions {
 	function keenwcchat_admin_message_box() {
 		add_meta_box( 'orders_convo', 'Conversation',
 				array($this,'keenwcchat_message_box'),
-				'shop_order', 'side', 'low');
+				'shop_order', 'advanced', 'high');
 	}
 
 	public function customerId($orderId){
@@ -105,10 +105,8 @@ class Keenwcchat_Functions {
 				'id' => $orderId,
 				'customer' => [ 
 					'id' => $customerId,
-					'online' => false,
 				],
 				'seller' => [
-					'online' => false,
 				],
 				'chat' => [],
 			];
