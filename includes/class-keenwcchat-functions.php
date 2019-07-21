@@ -106,7 +106,10 @@ class Keenwcchat_Functions {
 	}
 
 	public function keenwcchat_push_message(){
-		$message = $_POST['message'];
+		$message = sanitize_textarea_field($_POST['message']);
+		if(empty($message)){
+			return;
+		}
 		$orderId = intval($_POST['orderId']);
 		$user = wp_get_current_user();
 		$chat_history = get_post_meta($orderId, 'order_chat', true);
@@ -118,6 +121,7 @@ class Keenwcchat_Functions {
 			'text'	 => $message,
 			'time'	 => time(),
 		];
+
 		if(isset($_POST['attachment']) && !empty($_POST['attachment'])) {
 			$new_chat['attachment'] = $_POST['attachment'];
 		}

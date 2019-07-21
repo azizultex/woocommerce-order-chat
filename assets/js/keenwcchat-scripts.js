@@ -49,7 +49,7 @@ var frame;
 			// $("#image_id").val(attachment.id)
 			var attachmentData = { id: attachment.id, url: attachment.url, filename: attachment.filename}
 			attachmentID.val(JSON.stringify(attachmentData));
-			uploadImage.after('<a href="' + attachment.url + '" target="_blank">' + attachment.filename + '</a>');
+			uploadImage.after('<a class="attachedLink" href="' + attachment.url + '" target="_blank">' + attachment.filename + '</a>');
 			// submit on media file selected? 
 			// $( ".keenwcchat-send" ).trigger( "click" );
 		 }); 
@@ -70,11 +70,17 @@ var frame;
 					attachment: attachment,
 					orderId: keenwcchat.orderId,
 				};
+
+			if(!messageData.message.trim() && !attachment ){
+				return;
+			}
 			
 			console.log('messageData', messageData);
 
 			// reset the textarea field
-			$(messageBox).val('');
+			messageBox.val('');
+			attachmentID.val('');
+			$('.attachedLink').remove();
 
 			// perform ajax for message update
 			$.ajax({
@@ -85,7 +91,7 @@ var frame;
 				//   console.log("sending ", messageData)
 				},
 				success: function (resp) {
-					// console.log(resp);
+					console.log('resp', resp);
 					showChat(resp);
 					chatBox.scrollTop(chatBox[0].scrollHeight);
 				},
@@ -103,7 +109,6 @@ var frame;
 				var attachment = chat.attachment ? JSON.parse(chat.attachment) : '';
 				attachment = attachment ? '<a href="' + attachment.url + '" target="__blank">'+ attachment.filename +'</a>': '';
 				viewMessage += '<li class="'+ sent_replies +'">'+image+'<p>'+ chat.text + attachment + '</p><p class="chat_time">'+ unixToJsTime(chat.time) +'</p></li>';
-				// console.log(threadUser, chat.user);
 				// store previous chat user
 				threadUser = chat.user;
 			});
