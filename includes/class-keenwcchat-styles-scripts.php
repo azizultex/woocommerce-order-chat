@@ -42,7 +42,7 @@ class Load_Scripts_Styles {
 	 * @since    1.0.0
 	 */
 	public function enqueue_styles() {
-		if(is_view_order_page() || $this->functions->is_thankyou_page() || $this->functions->is_order_edit_page()){
+		if(is_view_order_page() || $this->functions->is_thankyou_page() || $this->functions->is_admin_order_edit_page()){
 			wp_enqueue_style( $this->plugin_name, plugin_dir_url( __DIR__ ) . 'assets/css/keenwcchat-style.css', array(), $this->version, 'all' );
 			// emojione picker
 			wp_enqueue_style( 'emoji-one-picker', plugin_dir_url( __DIR__ ) . 'assets/css/emojione.picker.css', array(), null, 'all' );
@@ -55,7 +55,7 @@ class Load_Scripts_Styles {
 	 * @since    1.0.0
 	 */
 	public function enqueue_scripts() {
-		if(is_view_order_page() || $this->functions->is_thankyou_page() || $this->functions->is_order_edit_page()){
+		if(is_view_order_page() || $this->functions->is_thankyou_page() || $this->functions->is_admin_order_edit_page()){
 			// emojione picker
 			wp_enqueue_script( 'emoji-one-picker', plugin_dir_url( __DIR__ ) . 'assets/js/emojione.picker.min.js', array( 'jquery'), null, false );
 			// keenchat scripts
@@ -69,12 +69,7 @@ class Load_Scripts_Styles {
     }
     
     public function localize_data(){
-		global $wp;
-		if(is_admin() && $this->functions->is_order_edit_page()){
-			$orderId = intval($_GET['post']);
-		} else {
-			$orderId = $wp->query_vars['view-order'] ? $wp->query_vars['view-order'] : $wp->query_vars['order-received'];
-		}
+		$orderId = $this->functions->retrieve_order_id();
 		$userId = $this->functions->customerId($orderId);
 		$sellerId = get_post_meta($orderId, 'seller_id', true);
 		$chatingWith = is_admin() ? $userId : $sellerId; // used to get typing status

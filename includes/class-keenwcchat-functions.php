@@ -61,6 +61,31 @@ class Keenwcchat_Functions {
 				'shop_order', 'advanced', 'high');
 	}
 
+	// set seller_id for live chat
+	public function set_seller_id(){
+		if($this->is_admin_order_edit_page()){
+			// track the seller id
+			update_post_meta(intval($_GET['post']), 'seller_id', get_current_user_id());
+		}
+	}
+	
+
+	public function is_admin_order_edit_page(){
+		if(is_admin() && ('shop_order' === get_post_type($_GET['post'])) && ( 'edit' == $_GET['action'])){
+			return true;
+		}
+		return false;
+	}
+
+	public function retrieve_order_id(){
+		global $wp;
+		if($this->is_admin_order_edit_page()){
+			return intval($_GET['post']);
+		} else {
+			return $wp->query_vars['view-order'] ? $wp->query_vars['view-order'] : $wp->query_vars['order-received'];
+		}
+	}
+
 	public function customerId($orderId){
 		$order = wc_get_order( $orderId );
 		// $user = $order->get_user();
@@ -70,15 +95,6 @@ class Keenwcchat_Functions {
 	public function is_thankyou_page(){
 		global $wp;
 		return (is_checkout() && !empty( $wp->query_vars['order-received']));
-	}
-
-	public function is_order_edit_page(){
-		if(is_admin() && ('shop_order' === get_post_type($_GET['post'])) && ( 'edit' == $_GET['action'])){
-			// track the seller id
-			update_post_meta(intval(isset($_GET['post'])), 'seller_id', get_current_user_id());
-			return true;
-		}
-		return false;
 	}
 
 	public function is_customer_or_subscriber($id){
@@ -129,7 +145,7 @@ class Keenwcchat_Functions {
 
 		// send json chat history to js
 		wp_send_json(array($new_chat));
-		exit;
+
 	}
 
 	public function keenwcchat_load_chat(){
@@ -149,28 +165,24 @@ class Keenwcchat_Functions {
 
 		// slice new chat to send 
 		wp_send_json($send_history);
-		exit;
 	}
 
 	public function keenwcchat_typing(){
-		$user = wp_get_current_user();
-		set_transient('keenwcchat_typing_' . $user->ID, true, 120); 
-		wp_send_json('typing');
-		exit;
+		$user = get_current_user_id();
+		set_transient('keenwcchat_typing_' . $user, true, 120); 
+		wp_send_json($user);
 	}
 
 	public function keenwcchat_not_typing(){
-		$user = wp_get_current_user();
-		delete_transient('keenwcchat_typing_' . $user->ID);
+		$user = get_current_user_id();
+		delete_transient('keenwcchat_typing_' . $user);
 		wp_send_json('not typing. transient deleted.');
-		exit;
 	}
 
 	public function get_typing_status(){
 		$chatingWith = intval($_POST['chatingWith']);
 		$status = get_transient('keenwcchat_typing_' . $chatingWith);
 		wp_send_json(['typing' => $status]);
-		exit;
 	}
 
 }

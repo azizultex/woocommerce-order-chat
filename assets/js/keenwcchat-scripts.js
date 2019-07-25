@@ -10,8 +10,7 @@ var frame;
 			attachmentID = $("#attachment"),
 			typeStatus = $('.typing-status'),
 			sendBtn = $('.keenwcchat-send'),
-			firstLoad = true,
-			loadingChat = false; // load one chat after completing other
+			firstLoad = true;
 
 		// emoji one picker
 		textArea.emojionePicker({
@@ -45,15 +44,15 @@ var frame;
 			 multiple:false
 		   });
 
-		    frame.on("select" , function(){
-			var attachment = frame.state().get("selection").first().toJSON();
-			// $("#image_id").val(attachment.id)
-			var attachmentData = { id: attachment.id, url: attachment.url, filename: attachment.filename}
-			attachmentID.val(JSON.stringify(attachmentData));
-			uploadImage.after('<a class="attachedLink" href="' + attachment.url + '" target="_blank">' + attachment.filename + '</a>');
-			// submit on media file selected? 
-			// $( ".keenwcchat-send" ).trigger( "click" );
-		 }); 
+			frame.on("select" , function(){
+				var attachment = frame.state().get("selection").first().toJSON();
+				// $("#image_id").val(attachment.id)
+				var attachmentData = { id: attachment.id, url: attachment.url, filename: attachment.filename}
+				attachmentID.val(JSON.stringify(attachmentData));
+				uploadImage.after('<a class="attachedLink" href="' + attachment.url + '" target="_blank">' + attachment.filename + '</a>');
+				// submit on media file selected? 
+				// $( ".keenwcchat-send" ).trigger( "click" );
+			}); 
 
 		  frame.open();
 		  return false;
@@ -109,7 +108,7 @@ var frame;
 				var image = threadUser !== chat.user ? '<img src="'+ image_url +'" alt></img>' : '';
 				var attachment = chat.attachment ? JSON.parse(chat.attachment) : '';
 				attachment = attachment ? '<a href="' + attachment.url + '" target="__blank">'+ attachment.filename +'</a>': '';
-				viewMessage += '<li class="'+ sent_replies +'">'+image+'<p>'+ chat.text + attachment + '</p><p class="chat_time">'+ unixToJsTime(chat.time) +'</p></li>';
+				viewMessage += '<li data-id="' + chat.time + '" class="'+ sent_replies +'">'+image+'<p>'+ chat.text + attachment + '</p><p class="chat_time">'+ unixToJsTime(chat.time) +'</p></li>';
 				// store previous chat user
 				threadUser = chat.user;
 			});
@@ -118,7 +117,6 @@ var frame;
 			} else {
 				$('#display-chat ul').append(viewMessage);
 			}
-			loadingChat = false; // so new chats can load 
 		}
 
 		// unix timestamp to JavaScript
@@ -166,21 +164,18 @@ var frame;
 
 		// request for chat history
 		function loadChat(){
-			if(loadingChat){
-				console.log('a chat is already in progress')
-				return;
-			}
 			var displayed = $('#display-chat li').length;
+			var loadChatData = {
+					action: 'keenwcchat_load_chat',
+					orderId: keenwcchat.orderId,
+					displayed: displayed,
+				};
 			$.ajax({
 				type: 'post',
 				url: keenwcchat.ajax,
-				data: {
-				action: 'keenwcchat_load_chat',
-				orderId: keenwcchat.orderId,
-				displayed: displayed,
-				},
+				data: loadChatData,
 				beforeSend: function (resp) {
-					loadingChat = true;
+					console.log('loadChatData', loadChatData)
 					// console.log("load chat ", keenwcchat.orderId, displayed)
 				},
 				success: function (resp) {
@@ -196,19 +191,21 @@ var frame;
 		}
 
 		textArea.on('focus', function(e){
+			console.log('typeing')
 			$.post(keenwcchat.ajax, { action: 'keenwcchat_typing' }, function(resp){
-				// console.log(resp);
+				console.log(resp);
 			});
 		});
 
 		textArea.on('blur', function(e){
 			$.post(keenwcchat.ajax, { action: 'keenwcchat_not_typing' }, function(resp){
-				// console.log(resp);
+				console.log(resp);
 			});
 		});
 
 		function getTypingStatus(){
 			$.post(keenwcchat.ajax, { action: 'get_typing_status', 'chatingWith': keenwcchat.chatingWith }, function(resp){
+				console.log('getting typing status')
 				if(resp.typing){
 					typeStatus.text('Typing...')
 				} else {
@@ -221,7 +218,7 @@ var frame;
 		setInterval(function(){
 			// console.log('requesting chat history')
 			loadChat();
-		}, 5000);
+		}, 15000);
 
 		// keep updating typing status
 		setInterval(function(){

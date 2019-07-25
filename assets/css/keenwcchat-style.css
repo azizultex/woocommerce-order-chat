@@ -54,25 +54,22 @@
     float: right;
     background: rgba(224, 224, 224,1);
 }
-
+#display-chat ul li.replies img:not(.emoji),
 #display-chat ul li.sent img:not(.emoji) {
-    right: 0;
+    left: 0;
     display: none;
 }
-#display-chat ul li.replies + li.sent > img {
+#display-chat ul li.replies + li.sent > img,
+#display-chat ul li.sent + li.replies > img {
     display: inline-block;
 }
 #display-chat ul li.replies + li.sent {
     text-align: right;
 }
-
 #display-chat ul li.replies {
     background: rgba(224, 224, 224,0.4);
 }
 
-#display-chat ul li.replies img:not(.emoji) {
-    left: 0;
-}
 /* #display-chat ul li.sent p {
     border-right: 1px solid;
 }
