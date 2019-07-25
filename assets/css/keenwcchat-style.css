@@ -30,7 +30,7 @@
     clear: both;
     font-size: 1em;
     margin-bottom: 0;
-    width: 90%;
+    width: calc(100% - 40px);
     box-sizing: border-box;
     padding:4px 10px;
 }

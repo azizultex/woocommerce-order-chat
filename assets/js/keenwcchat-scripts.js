@@ -10,7 +10,8 @@ var frame;
 			attachmentID = $("#attachment"),
 			typeStatus = $('.typing-status'),
 			sendBtn = $('.keenwcchat-send'),
-			firstLoad = true;
+			firstLoad = true,
+			loadingChat = false; // load one chat after completing other
 
 		// emoji one picker
 		textArea.emojionePicker({
@@ -117,6 +118,7 @@ var frame;
 			} else {
 				$('#display-chat ul').append(viewMessage);
 			}
+			loadingChat = false; // so new chats can load 
 		}
 
 		// unix timestamp to JavaScript
@@ -164,6 +166,10 @@ var frame;
 
 		// request for chat history
 		function loadChat(){
+			if(loadingChat){
+				console.log('a chat is already in progress')
+				return;
+			}
 			var displayed = $('#display-chat li').length;
 			$.ajax({
 				type: 'post',
@@ -174,6 +180,7 @@ var frame;
 				displayed: displayed,
 				},
 				beforeSend: function (resp) {
+					loadingChat = true;
 					// console.log("load chat ", keenwcchat.orderId, displayed)
 				},
 				success: function (resp) {
