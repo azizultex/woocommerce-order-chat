@@ -88,7 +88,7 @@ class Keenwcchat {
     // admin notice if wc not active
     public function keenwcchat_admin_notice(){
 		$class = 'notice notice-error';
-		$message = __( 'requires WooCommerce plugin to be installed and activated.', 'keenwcchat' );
+		$message = __( 'Requires WooCommerce plugin to be installed and activated.', 'keenwcchat' );
 		printf( '<div class="%1$s"><p><strong>%2$s</strong>%3$s</p></div>', esc_attr( $class ), esc_html__('WooCommerce Order Chat ', 'keenwcchat'), $message );
     }
 

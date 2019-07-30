@@ -12,6 +12,32 @@ var frame;
 			sendBtn = $('.keenwcchat-send'),
 			firstLoad = true;
 
+
+		// Your web app's Firebase configuration
+		var firebaseConfig = {
+			apiKey: "AIzaSyDzSl-oKW-6KeGYreYwfZfrfUfq_TijgMA",
+			authDomain: "vexplainer-chat-plugin.firebaseapp.com",
+			databaseURL: "https://vexplainer-chat-plugin.firebaseio.com",
+			projectId: "vexplainer-chat-plugin",
+			storageBucket: "",
+			messagingSenderId: "1089326455859",
+			appId: "1:1089326455859:web:17077873ab2d5fb2"
+		};
+		// Initialize Firebase
+		firebase.initializeApp(firebaseConfig);
+
+
+		//create firebase database reference
+		var dbRef = firebase.database();
+		var chatsRef = dbRef.ref('chats');
+
+		//load older conatcts as well as any newly added one...
+		chatsRef.on("child_added", function(snap) {
+			console.log("child added", snap.key, snap.val());
+			chatBox.append('<li>'+ snap.val().message +'<li>');
+			// $('#contacts').append(contactHtmlFromObject(snap.val()));
+		});
+
 		// emoji one picker
 		textArea.emojionePicker({
 			type: 'unicode',
@@ -65,7 +91,6 @@ var frame;
 			var messageBox	=	$(this).siblings().find('textarea') || $(this).siblings('textarea'),
 				attachment	=	$(this).siblings('input[name=attachment]').val(),
 				messageData =	{
-					action: 'keenwcchat_push_message',
 					message: messageBox.val(),
 					attachment: attachment,
 					orderId: keenwcchat.orderId,
@@ -82,20 +107,23 @@ var frame;
 			attachmentID.val('');
 			$('.attachedLink').remove();
 
+			// push the data to firebase
+			chatsRef.push(messageData);
+
 			// perform ajax for message update
-			$.ajax({
-				type: 'post',
-				url: keenwcchat.ajax,
-				data: messageData,
-				beforeSend: function (resp) {
-				//   console.log("sending ", messageData)
-				},
-				success: function (resp) {
-					console.log('resp', resp);
-					showChat(resp);
-					chatBox.scrollTop(chatBox[0].scrollHeight);
-				},
-			})
+			// $.ajax({
+			// 	type: 'post',
+			// 	url: keenwcchat.ajax,
+			// 	data: messageData,
+			// 	beforeSend: function (resp) {
+			// 	//   console.log("sending ", messageData)
+			// 	},
+			// 	success: function (resp) {
+			// 		console.log('resp', resp);
+			// 		showChat(resp);
+			// 		chatBox.scrollTop(chatBox[0].scrollHeight);
+			// 	},
+			// })
 		});
 
 		// load the messages to show
@@ -103,20 +131,23 @@ var frame;
 			var displayed = $('#display-chat li').length;
 			var viewMessage = '', threadUser, history = history || [];
 			history.forEach(chat => {
-				var sent_replies = keenwcchat.user == chat.user ? 'sent' : 'replies';
-				var image_url = keenwcchat.user == chat.user ? keenwcchat.user_img : keenwcchat.seller_img;
-				var image = threadUser !== chat.user ? '<img src="'+ image_url +'" alt></img>' : '';
-				var attachment = chat.attachment ? JSON.parse(chat.attachment) : '';
-				attachment = attachment ? '<a href="' + attachment.url + '" target="__blank">'+ attachment.filename +'</a>': '';
-				viewMessage += '<li data-id="' + chat.time + '" class="'+ sent_replies +'">'+image+'<p>'+ chat.text + attachment + '</p><p class="chat_time">'+ unixToJsTime(chat.time) +'</p></li>';
+				// var sent_replies = keenwcchat.user == chat.user ? 'sent' : 'replies';
+				// var image_url = keenwcchat.user == chat.user ? keenwcchat.user_img : keenwcchat.seller_img;
+				// var image = threadUser !== chat.user ? '<img src="'+ image_url +'" alt></img>' : '';
+				// var attachment = chat.attachment ? JSON.parse(chat.attachment) : '';
+				// attachment = attachment ? '<a href="' + attachment.url + '" target="__blank">'+ attachment.filename +'</a>': '';
+				// viewMessage += '<li data-id="' + chat.time + '" class="'+ sent_replies +'">'+image+'<p>'+ chat.text + attachment + '</p><p class="chat_time">'+ unixToJsTime(chat.time) +'</p></li>';
 				// store previous chat user
-				threadUser = chat.user;
+				// threadUser = chat.user;
+
+				chatBox.append('<li>' + chat.message + '</li>');
+				
 			});
-			if( displayed === 0 ){
-				chatBox.append('<ul>' + viewMessage + '</ul>');
-			} else {
-				$('#display-chat ul').append(viewMessage);
-			}
+			// if( displayed === 0 ){
+			// 	chatBox.append('<ul>' + viewMessage + '</ul>');
+			// } else {
+			// 	$('#display-chat ul').append(viewMessage);
+			// }
 		}
 
 		// unix timestamp to JavaScript
@@ -215,10 +246,10 @@ var frame;
 		}
 
 		// refresh chat every seconds
-		setInterval(function(){
-			// console.log('requesting chat history')
-			loadChat();
-		}, 15000);
+		// setInterval(function(){
+		// 	// console.log('requesting chat history')
+		// 	loadChat();
+		// }, 8000);
 
 		// keep updating typing status
 		setInterval(function(){
@@ -227,7 +258,7 @@ var frame;
 		}, 2000);
 
 		// first load message history
-		loadChat();
+		// loadChat();
 			
 	});
 	

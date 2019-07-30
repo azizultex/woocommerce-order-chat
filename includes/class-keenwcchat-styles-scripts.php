@@ -58,8 +58,9 @@ class Load_Scripts_Styles {
 		if(is_view_order_page() || $this->functions->is_thankyou_page() || $this->functions->is_admin_order_edit_page()){
 			// emojione picker
 			wp_enqueue_script( 'emoji-one-picker', plugin_dir_url( __DIR__ ) . 'assets/js/emojione.picker.min.js', array( 'jquery'), null, false );
+			wp_enqueue_script( 'firebase', '//www.gstatic.com/firebasejs/4.5.0/firebase.js', array(), null, false );
 			// keenchat scripts
-			wp_enqueue_script( $this->plugin_name, plugin_dir_url( __DIR__ ) . 'assets/js/keenwcchat-scripts.js', array( 'jquery' ), $this->version, false );
+			wp_enqueue_script( $this->plugin_name, plugin_dir_url( __DIR__ ) . 'assets/js/keenwcchat-scripts.js', array( 'jquery', 'firebase' ), $this->version, false );
 			// localize necessary data
 			wp_localize_script($this->plugin_name, 'keenwcchat', $this->localize_data());
 
