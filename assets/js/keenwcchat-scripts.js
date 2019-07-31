@@ -24,7 +24,6 @@ var frame;
 		// Initialize Firebase
 		firebase.initializeApp(firebaseConfig);
 
-
 		//create firebase database reference
 		var dbRef = firebase.database();
 		 // create firebase db with the order id
@@ -43,7 +42,6 @@ var frame;
 				return false;
 			}
 		});
-
 
 		// upload media button trigger
 		uploadImage.on("click",function(){
@@ -74,12 +72,11 @@ var frame;
 		// send message on send button click
 		sendBtn.on('click', function(e){
 			e.preventDefault();
-			var messageBox	=	$(this).siblings().find('textarea') || $(this).siblings('textarea'),
-				attachment	=	$(this).siblings('input[name=attachment]').val();
-				// parsedAttach = JSON.parse(attachment);
-			var messageData =	{
+			var attachment	= attachmentID.val(),
+				parsedAttach = JSON.parse(),
+				messageData =	{
 					user: keenwcchat.user,
-					message: messageBox.val(),
+					message: textArea.val(),
 					time: new Date().getTime(),
 				};
 
@@ -88,14 +85,14 @@ var frame;
 					return;
 				}
 				// add media if available
-				// if(parsedAttach.url){
-				// 	messageData.attachment = parsedAttach;
-				// }
+				if(parsedAttach.url){
+					messageData.attachment = parsedAttach;
+				}
 
 				console.log('messageData', messageData);
 				
 				// reset the textarea field
-				messageBox.val('');
+				textArea.val('');
 				attachmentID.val('');
 				$('.attachedLink').remove();
 
