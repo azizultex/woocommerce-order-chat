@@ -9,7 +9,8 @@ var frame;
 			uploadImage = $("#upload_image"),
 			attachmentID = $("#attachment"),
 			typeStatus = $('.typing-status'),
-			sendBtn = $('.keenwcchat-send');
+			sendBtn = $('.keenwcchat-send'),
+			threadUser = null; // need to track message thread to hide avatar and name
 
 		// Your web app's Firebase configuration
 		var firebaseConfig = {
@@ -73,7 +74,7 @@ var frame;
 		sendBtn.on('click', function(e){
 			e.preventDefault();
 			var attachment	= attachmentID.val(),
-				parsedAttach = JSON.parse(),
+				parsedAttach = JSON.parse(attachment),
 				messageData =	{
 					user: keenwcchat.user,
 					message: textArea.val(),
@@ -108,21 +109,25 @@ var frame;
 
 		// load the messages to show
 		function showChat(chat){
-				var html = '';
-				var sent_replies = keenwcchat.user === chat.user ? 'sent' : 'replies';
-				var user = chat.user == keenwcchat.customer.id ? keenwcchat.customer : keenwcchat.seller;
-
-				var attachment = chat.attachment ? chat.attachment : '';
+				var html = '',
+					sent_replies = keenwcchat.user === chat.user ? 'sent' : 'replies',
+					user = chat.user == keenwcchat.customer.id ? keenwcchat.customer : keenwcchat.seller,
+					userName = threadUser !== chat.user ? user.name : '',
+					attachment = chat.attachment ? chat.attachment : '',
 					attachment = attachment ? '<a href="' + attachment.url + '" target="__blank">'+ attachment.filename +'</a>': '';
 
 				html += '<div class="' + sent_replies + '">';
-					html += '<div class="avatar"><img src="'+ user.avatar +'"></div>';
+					if( threadUser !== chat.user ){
+						html += '<div class="avatar"><img src="'+ user.avatar +'"></div>';
+					}
 					html += '<div class="message">';
-						html += '<p class="name_time">' + user.name + '<span> ' + unixToJsTime(chat.time) + '</span></p>';
+						html += '<p class="name_time">' + userName + '<span> ' + unixToJsTime(chat.time) + '</span></p>';
 					html += '<p>' + chat.message + '</p>';
 					html += '<p>' + attachment + '</p>';
 					html += '</div>';
 				html += '</div>';
+
+				threadUser = chat.user; // need to track message thread to hide avatar and name
 				return html;
 		}
 
