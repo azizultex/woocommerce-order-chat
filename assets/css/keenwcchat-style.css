@@ -19,20 +19,29 @@
     overflow-y: scroll;
     overflow-x: hidden;
 }
+#display-chat > div:nth-child(even){
+    background-color: #ddd;
+}
+
+
+
 #display-chat ul {
     list-style: none;
     margin: 0;
     padding:0;
 }
 #display-chat ul li {
-    display: inline-block;
-    position: relative;
-    clear: both;
+    /* display: inline-block; */
+    /* position: relative; */
+    /* clear: both; */
     font-size: 1em;
-    margin-bottom: 0;
+    /* margin-bottom: 0; */
     width: calc(100% - 40px);
     box-sizing: border-box;
     padding:4px 10px;
+}
+#display-chat ul li:nth-child(even) {
+    background-color: #ddd;
 }
 #display-chat ul li p {
     margin-top: 0;
@@ -51,23 +60,23 @@
     margin-top: -10px;
 }
  #display-chat ul li.sent {
-    float: right;
-    background: rgba(224, 224, 224,1);
+    /* float: right;
+    background: rgba(224, 224, 224,1); */
 }
 #display-chat ul li.replies img:not(.emoji),
 #display-chat ul li.sent img:not(.emoji) {
     left: 0;
-    display: none;
+    /* display: none; */
 }
 #display-chat ul li.replies + li.sent > img,
 #display-chat ul li.sent + li.replies > img {
-    display: inline-block;
+    /* display: inline-block; */
 }
 #display-chat ul li.replies + li.sent {
     text-align: right;
 }
 #display-chat ul li.replies {
-    background: rgba(224, 224, 224,0.4);
+    /* background: rgba(224, 224, 224,0.4); */
 }
 
 /* #display-chat ul li.sent p {

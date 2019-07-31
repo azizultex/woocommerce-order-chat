@@ -78,11 +78,25 @@ class Load_Scripts_Styles {
 		return [
 			'user'	  		=> get_current_user_id(),
 			'chatingWith' 	=> $chatingWith,
-			'user_img'		=> get_avatar_url($userId),
-			'seller_img' 	=> get_avatar_url($sellerId),
+			'customer'		=> $this->get_user_data($userId),
+			'seller' 		=> $this->get_user_data($sellerId),
 			'orderId' 		=> $orderId,
 			'ajax' 	  		=> admin_url( 'admin-ajax.php' ),
 		];
+	}
+
+	public function get_user_data($id){
+		$user = get_userdata($id);
+		$username = $user->user_login;
+		$first_name = $user->first_name;
+		$last_name = $user->last_name;
+		$full_name = join(' ', array($first_name, $last_name));
+		$name = $first_name ? $full_name : $username;
+		return array(
+			'id' => $id,
+			'avatar' => get_avatar_url($id),
+			'name'	 => $name,
+		);
 	}
 
 }

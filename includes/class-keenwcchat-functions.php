@@ -38,7 +38,8 @@ class Keenwcchat_Functions {
 	public function keenwcchat_message_box(){
 		?>
 		<div class="keenwcchat">
-			<div id="display-chat"></div>
+			<div id="display-chat">
+			</div>
 			<div id="keenwcchat-message">
 				<p class="typing-status"></p>
 				<div class="keenwcchat_box">
@@ -50,6 +51,11 @@ class Keenwcchat_Functions {
 			</div>
 		</div>
 		<?php
+	}
+
+	// update seller_id to start chat with
+	public function keenwcchat_chat_set_seller_id($order_id){
+		update_post_meta($order_id, 'seller_id', 1);
 	}
 
 	/*
@@ -69,7 +75,6 @@ class Keenwcchat_Functions {
 		}
 	}
 	
-
 	public function is_admin_order_edit_page(){
 		if(is_admin() && ('shop_order' === get_post_type($_GET['post'])) && ( 'edit' == $_GET['action'])){
 			return true;
@@ -105,66 +110,6 @@ class Keenwcchat_Functions {
 	public function is_admin_or_shop_manager($id){
 		$user = get_userdata( $id );
 		return !empty(array_intersect(['shop_manager', 'administrator'], $user->roles));
-	}
-
-	public function keenwcchat_chat_basic_data($order_id){
-		$customerId = $this->customerId($order_id);
-		$chat_data = [
-			'id' => $order_id,
-			'customer' => [ 
-				'id' => $customerId,
-			],
-			'seller' => [
-			],
-			'chat' => [],
-		];
-		update_post_meta($order_id, 'order_chat', $chat_data);
-	}
-
-	public function keenwcchat_push_message(){
-		$message = sanitize_textarea_field($_POST['message']);
-		$orderId = intval($_POST['orderId']);
-		$user = wp_get_current_user();
-		$chat_history = get_post_meta($orderId, 'order_chat', true);
-		// $is_cus_sub = $this->is_customer_or_subscriber($user->ID);
-
-		// push new chat
-		$new_chat = [
-			'user' 	 => $user->ID,
-			'text'	 => $message,
-			'time'	 => time(),
-		];
-
-		if(isset($_POST['attachment']) && !empty($_POST['attachment'])) {
-			$new_chat['attachment'] = $_POST['attachment'];
-		}
-		$chat_history['chat'][] = $new_chat;
-
-		// update the chat to db
-		update_post_meta($orderId, 'order_chat', $chat_history);
-
-		// send json chat history to js
-		wp_send_json(array($new_chat));
-
-	}
-
-	public function keenwcchat_load_chat(){
-		$orderId = intval($_POST['orderId']);
-		$displayed = intval($_POST['displayed']);
-
-		// retrieve database history
-		$chat_history = get_post_meta($orderId, 'order_chat', true);
-						
-		// update basic data structure if not already set
-		if(!isset($chat_history['chat'])){
-			$this->keenwcchat_chat_basic_data($orderId);
-		}
-		
-		// track the history displayed so far
-		$send_history = array_slice($chat_history['chat'], $displayed);
-
-		// slice new chat to send 
-		wp_send_json($send_history);
 	}
 
 	public function keenwcchat_typing(){
