@@ -150,3 +150,7 @@
     outline: 0;
 }
 
+.emojionepicker-picker {
+    z-index: inherit !important;
+}
+
