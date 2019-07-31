@@ -75,8 +75,8 @@ var frame;
 		sendBtn.on('click', function(e){
 			e.preventDefault();
 			var messageBox	=	$(this).siblings().find('textarea') || $(this).siblings('textarea'),
-				attachment	=	$(this).siblings('input[name=attachment]').val(),
-				parsedAttach = JSON.parse(attachment);
+				attachment	=	$(this).siblings('input[name=attachment]').val();
+				// parsedAttach = JSON.parse(attachment);
 			var messageData =	{
 					user: keenwcchat.user,
 					message: messageBox.val(),
@@ -88,9 +88,9 @@ var frame;
 					return;
 				}
 				// add media if available
-				if(parsedAttach.url){
-					messageData.attachment = parsedAttach;
-				}
+				// if(parsedAttach.url){
+				// 	messageData.attachment = parsedAttach;
+				// }
 
 				console.log('messageData', messageData);
 				

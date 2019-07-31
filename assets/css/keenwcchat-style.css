@@ -4,141 +4,17 @@
 #keenwcchat-message {
     clear: both;
     padding-top: 5px;
+    padding-bottom: 30px;
+    border-bottom: 1px solid #707070;
 }
 #keenwcchat-message .keenwcchat_box {
     position: relative;
-}
-#keenwcchat-message textarea {
-    background: rgba(224, 224, 224,0.7);
-    padding-left: 10px !important;
-    width: 100%;
-    height: 100px;
+    line-height: 0;
+    margin: 0 0 20px;
 }
 #display-chat {
     max-height: 400px;
-    overflow-y: scroll;
-    overflow-x: hidden;
 }
-#display-chat > div:nth-child(even){
-    background-color: #ddd;
-}
-
-
-
-#display-chat ul {
-    list-style: none;
-    margin: 0;
-    padding:0;
-}
-#display-chat ul li {
-    /* display: inline-block; */
-    /* position: relative; */
-    /* clear: both; */
-    font-size: 1em;
-    /* margin-bottom: 0; */
-    width: calc(100% - 40px);
-    box-sizing: border-box;
-    padding:4px 10px;
-}
-#display-chat ul li:nth-child(even) {
-    background-color: #ddd;
-}
-#display-chat ul li p {
-    margin-top: 0;
-    margin-bottom: 0;
-    text-align: left;
-}
-#display-chat ul li p.chat_time {
-    font-size: 0.7em;
-    font-style: italic;
-}
-#display-chat ul li img:not(.emoji) {
-    height: 25px;
-    width: 25px;
-    border-radius: 500px;
-    z-index: 99;
-    margin-top: -10px;
-}
- #display-chat ul li.sent {
-    /* float: right;
-    background: rgba(224, 224, 224,1); */
-}
-#display-chat ul li.replies img:not(.emoji),
-#display-chat ul li.sent img:not(.emoji) {
-    left: 0;
-    /* display: none; */
-}
-#display-chat ul li.replies + li.sent > img,
-#display-chat ul li.sent + li.replies > img {
-    /* display: inline-block; */
-}
-#display-chat ul li.replies + li.sent {
-    text-align: right;
-}
-#display-chat ul li.replies {
-    /* background: rgba(224, 224, 224,0.4); */
-}
-
-/* #display-chat ul li.sent p {
-    border-right: 1px solid;
-}
-#display-chat ul li.replies p {
-    border-left: 1px solid;
-} */
-#keenwcchat-message .typing-status {
-    margin-bottom: 2px;
-    font-size: 0.8em;
-}
-#keenwcchat-message .keenwcchat-send {
-    float: right;
-    text-decoration: none !important;
-    background: #000;
-    padding: 10px;
-    color: #FFF;
-    margin: 5px 0;
-}
-
-#display-chat ul li:first-child:after {}
-
-#display-chat ul li.replies + li.sent,
-#display-chat ul li.sent + li.replies {
-    margin-top: 15px;
-}
-#display-chat ul li.replies + li.sent p:after,
-#display-chat ul li.sent + li.replies p:after {
-
-}
-/* #display-chat ul li.replies + li.sent p:after {
-    content: '';
-    position: absolute;
-    top: 8px;
-    right: 0;
-    width: 0;
-    height: 0;
-    border: 12px solid transparent;
-    border-left-color: rgba(224, 224, 224,1);
-    border-right: 0;
-    border-top: 0;
-    margin-bottom: 0;
-    margin-right: -5px;
-    transform: rotate(134deg);
-    z-index: 999;
-}
-#display-chat ul li.sent + li.replies p:after  {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 0;
-    height: 0;
-    border: 12px solid transparent;
-    border-left-color: rgba(224, 224, 224,0.4);
-    border-right: 0;
-    border-bottom: 0;
-    margin-top: 8px;
-    margin-left: -5px;
-    transform: rotate(45deg);
-} */
 
 .keenwcchat .emojipicker {
     height: 44px;
@@ -147,3 +23,130 @@
     background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiP…4xMiwxODIuMDM0DQoJYzAsMCw2OS43OTMsNzAuNzA0LDE0MC40OTgsMCIvPg0KPC9zdmc+DQo=) center center no-repeat;
     background-size: 60%;
 }
+.keenwcchat #display-chat .avatar {
+    width: 45px;
+    height: 50px;
+    float: left;
+}
+
+.keenwcchat #display-chat .avatar img {
+    border-radius: 500px;
+    background: #B6C1C2;
+    width: 100%;
+}
+
+.keenwcchat #display-chat .message {
+    overflow: hidden;
+}
+
+.keenwcchat #display-chat .message p {
+    line-height: 1;
+    font-size: 0.875rem;
+    letter-spacing: .04rem;
+    color: #151515;
+    font-weight: 500;
+    margin: 0;
+    font-family: "Raleway", sans-serif;
+}
+
+.keenwcchat #display-chat .message p.name_time {
+    font-weight: 600;
+    font-size: 1rem;
+    margin: 0 0 12px;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.keenwcchat #display-chat .message p.name_time span {
+    font-weight: 400;
+    font-size: 0.75rem;
+    margin-left: 15px;
+}
+
+.keenwcchat #display-chat .replies {
+    background: white;
+}
+
+.keenwcchat #display-chat .replies .avatar {
+    margin-right: 10px;
+}
+.keenwcchat #display-chat .sent, .keenwcchat #display-chat .replies {
+    padding: 19px;
+}
+
+.keenwcchat #display-chat .sent {
+    background-color: #F2F2F2;
+}
+
+.keenwcchat #display-chat .sent .avatar {
+    float: right;
+    margin-left: 10px;
+}
+
+.keenwcchat #display-chat .sent .message {
+    text-align: right;
+}
+
+.keenwcchat #display-chat .sent .message p.name_time {
+        flex-direction: row-reverse;
+}
+
+.keenwcchat #display-chat .sent .message p.name_time span {
+        margin-right: 15px;
+}
+#keenwcchat-message .keenwcchat_box textarea {
+    background: transparent;
+    padding: 25px;
+    width: 100%;
+    height: 100px;
+    border: 1px solid #707070;
+    font-size: .85rem;
+    line-height: 1.4;
+    letter-spacing: .04rem;
+    border-radius: 0 0 5px 5px;
+    font-family: "Raleway", sans-serif;
+    box-shadow: 0 1px 6px rgba(0,0,0,.16);
+}
+
+#keenwcchat-message .keenwcchat_box textarea::placeholder, #keenwcchat-message .keenwcchat_box textarea::-moz-input-placeholder, #keenwcchat-message .keenwcchat_box textarea::-ms-input-placeholder {
+    font-size: .85rem;
+    line-height: 1;
+    color: #434343;
+    letter-spacing: .04rem;
+}
+
+#keenwcchat-message .keenchat-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+#keenwcchat-message .keenchat-footer #upload_image {
+    border: 1px solid #707070;
+    line-height: 1;
+    font-size: 0.875rem;
+    letter-spacing: .04rem;
+    color: #434343;
+    background: transparent;
+    border-radius: 5px;
+    padding: 12px 27px;
+}
+
+#keenwcchat-message .keenchat-footer .keenwcchat-send {
+    background: #1BB567;
+    line-height: 1;
+    font-size: 0.875rem;
+    letter-spacing: .04rem;
+    color: white;
+    border-radius: 5px;
+    padding: 12px 27px;
+    text-transform: uppercase;
+    text-decoration: none;
+}
+
+#keenwcchat-message .keenchat-footer .keenwcchat-send:focus {
+    outline-offset: none;
+    outline: 0;
+}
+

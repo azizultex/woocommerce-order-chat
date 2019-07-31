@@ -43,11 +43,14 @@ class Keenwcchat_Functions {
 			<div id="keenwcchat-message">
 				<p class="typing-status"></p>
 				<div class="keenwcchat_box">
-					<textarea class="keenwcchat-textarea"></textarea>
+					<textarea placeholder="Type your message..." class="keenwcchat-textarea"></textarea>
 				</div>
-				<button id="upload_image">Upload image</button>
-				<input type="hidden" name="attachment" id="attachment" value=""/>
-				<a href="#" class="keenwcchat-send">Send message</a>
+				
+				<div class="keenchat-footer">
+					<button id="upload_image">Choose a file</button>
+					<input type="hidden" name="attachment" id="attachment" value=""/>
+					<a href="#" class="keenwcchat-send">Send message</a>
+				</div>
 			</div>
 		</div>
 		<?php
