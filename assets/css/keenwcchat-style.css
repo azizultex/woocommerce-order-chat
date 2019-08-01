@@ -8,7 +8,6 @@
     border-bottom: 1px solid #707070;
 }
 #keenwcchat-message .keenwcchat_box {
-    position: relative;
     line-height: 0;
     margin: 0 0 20px;
 }
@@ -150,7 +149,7 @@
     outline: 0;
 }
 
-.emojionepicker-picker {
+#keenwcchat-message .emojionepicker-picker {
     z-index: inherit !important;
 }
 

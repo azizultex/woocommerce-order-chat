@@ -175,7 +175,7 @@ var frame;
 		}
 
 		textArea.on('focus', function(e){
-			console.log('typeing')
+			console.log('typing')
 			$.post(keenwcchat.ajax, { action: 'keenwcchat_typing' }, function(resp){
 				console.log(resp);
 			});
