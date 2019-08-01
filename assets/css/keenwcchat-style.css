@@ -3,6 +3,7 @@
 }
 #keenwcchat-message {
     clear: both;
+    position: relative;
     padding-top: 5px;
     padding-bottom: 30px;
     border-bottom: 1px solid #707070;
@@ -11,8 +12,10 @@
     line-height: 0;
     margin: 0 0 20px;
 }
+
 #display-chat {
     max-height: 400px;
+    overflow-x: scroll;
 }
 
 .keenwcchat .emojipicker {
@@ -22,6 +25,12 @@
     background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiP…4xMiwxODIuMDM0DQoJYzAsMCw2OS43OTMsNzAuNzA0LDE0MC40OTgsMCIvPg0KPC9zdmc+DQo=) center center no-repeat;
     background-size: 60%;
 }
+
+#keenwcchat-message .emojionepicker-picker {
+    left: 0 !important;
+    top: 74% !important;
+}
+
 .keenwcchat #display-chat .avatar {
     width: 45px;
     height: 50px;
@@ -38,14 +47,18 @@
     overflow: hidden;
 }
 
-.keenwcchat #display-chat .message p {
-    line-height: 1;
+.keenwcchat #display-chat .message p, .keenwcchat #display-chat .message p a {
+    line-height: 1.4;
     font-size: 0.875rem;
     letter-spacing: .04rem;
     color: #151515;
     font-weight: 500;
     margin: 0;
     font-family: "Raleway", sans-serif;
+}
+
+.keenwcchat #display-chat .message p a {
+    color: #1BB567;
 }
 
 .keenwcchat #display-chat .message p.name_time {
@@ -60,7 +73,6 @@
 .keenwcchat #display-chat .message p.name_time span {
     font-weight: 400;
     font-size: 0.75rem;
-    margin-left: 15px;
 }
 
 .keenwcchat #display-chat .replies {
@@ -70,6 +82,7 @@
 .keenwcchat #display-chat .replies .avatar {
     margin-right: 10px;
 }
+
 .keenwcchat #display-chat .sent, .keenwcchat #display-chat .replies {
     padding: 19px;
 }
@@ -83,17 +96,27 @@
     margin-left: 10px;
 }
 
+.keenwcchat #display-chat .replies .message {
+    margin-left: 55px;
+}
+
 .keenwcchat #display-chat .sent .message {
     text-align: right;
+    margin-right: 55px;
 }
 
 .keenwcchat #display-chat .sent .message p.name_time {
-        flex-direction: row-reverse;
+    flex-direction: row-reverse;
 }
 
-.keenwcchat #display-chat .sent .message p.name_time span {
-        margin-right: 15px;
+.keenwcchat #display-chat .replies .message p.name_time b {
+    margin-right: 15px;
 }
+
+.keenwcchat #display-chat .sent .message p.name_time b {
+    margin-left: 15px;
+}
+
 #keenwcchat-message .keenwcchat_box textarea {
     background: transparent;
     padding: 25px;
@@ -130,6 +153,7 @@
     background: transparent;
     border-radius: 5px;
     padding: 12px 27px;
+    margin-left: 45px;
 }
 
 #keenwcchat-message .keenchat-footer .keenwcchat-send {
@@ -152,4 +176,33 @@
 #keenwcchat-message .emojionepicker-picker {
     z-index: inherit !important;
 }
+@media only screen and ( max-width: 767px ){
+    .keenwcchat #display-chat .sent, .keenwcchat #display-chat .replies {
+        padding: 12px;
+    }
+}
 
+@media only screen and ( max-width: 420px ){
+    #keenwcchat-message .keenchat-footer {
+        flex-wrap: wrap;
+    }
+
+    #keenwcchat-message .keenchat-footer #upload_image {
+        flex-grow: 1;
+        margin-bottom: 20px;
+        padding: 10px 27px;
+    }
+
+    #keenwcchat-message .emojionepicker-picker {
+        top: 55% !important;
+    }
+
+    .keenwcchat #display-chat .message p.name_time {
+        margin: 0;
+    }
+
+    #keenwcchat-message .keenchat-footer .keenwcchat-send {
+        width: 100%;
+        text-align: center;
+    }
+}

@@ -74,7 +74,7 @@ var frame;
 		sendBtn.on('click', function(e){
 			e.preventDefault();
 			var attachment	= attachmentID.val(),
-				parsedAttach = JSON.parse(attachment),
+				parsedAttach = attachment ? JSON.parse(attachment) : {},
 				messageData =	{
 					user: keenwcchat.user,
 					message: textArea.val(),
@@ -114,7 +114,8 @@ var frame;
 					user = chat.user == keenwcchat.customer.id ? keenwcchat.customer : keenwcchat.seller,
 					userName = threadUser !== chat.user ? user.name : '',
 					attachment = chat.attachment ? chat.attachment : '',
-					attachment = attachment ? '<a href="' + attachment.url + '" target="__blank">'+ attachment.filename +'</a>': '';
+					attachment = attachment ? '<a href="' + attachment.url + '" target="__blank">'+ attachment.filename +'</a>': '',
+					userName = userName ? '<b>' + userName + '</b>' : '';
 
 				html += '<div class="' + sent_replies + '">';
 					if( threadUser !== chat.user ){
