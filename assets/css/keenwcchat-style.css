@@ -64,7 +64,7 @@
 .keenwcchat #display-chat .message p.name_time {
     font-weight: 600;
     font-size: 1rem;
-    margin: 0 0 12px;
+    margin: 0 0 4px;
     display: flex;
     align-items: center;
     flex-wrap: wrap;
@@ -84,7 +84,7 @@
 }
 
 .keenwcchat #display-chat .sent, .keenwcchat #display-chat .replies {
-    padding: 19px;
+    padding: 18px;
 }
 
 .keenwcchat #display-chat .sent {
