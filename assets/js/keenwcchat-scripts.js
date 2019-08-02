@@ -14,13 +14,13 @@ var frame;
 
 		// Your web app's Firebase configuration
 		var firebaseConfig = {
-			apiKey: "AIzaSyDzSl-oKW-6KeGYreYwfZfrfUfq_TijgMA",
-			authDomain: "vexplainer-chat-plugin.firebaseapp.com",
-			databaseURL: "https://vexplainer-chat-plugin.firebaseio.com",
-			projectId: "vexplainer-chat-plugin",
+			apiKey: keenwcchat.firebase.api_key,
+			authDomain: keenwcchat.auth_domain,
+			databaseURL: "https://" + keenwcchat.auth_domain +".firebaseio.com",
+			projectId: keenwcchat.auth_domain,
 			storageBucket: "",
-			messagingSenderId: "1089326455859",
-			appId: "1:1089326455859:web:17077873ab2d5fb2"
+			messagingSenderId: "",
+			appId: ""
 		};
 		// Initialize Firebase
 		firebase.initializeApp(firebaseConfig);

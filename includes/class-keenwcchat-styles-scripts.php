@@ -81,6 +81,7 @@ class Load_Scripts_Styles {
 			'customer'		=> $this->get_user_data($userId),
 			'seller' 		=> $this->get_user_data($sellerId),
 			'orderId' 		=> $orderId,
+			'firebase' 		=> get_option("firebase_credentials"),
 			'ajax' 	  		=> admin_url( 'admin-ajax.php' ),
 		];
 	}
