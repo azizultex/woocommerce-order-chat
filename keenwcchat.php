@@ -12,7 +12,13 @@
 * Domain Path:       /languages
 */
 
-require plugin_dir_path( __FILE__ ) . 'includes/class-keenwcchat.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/class-keenwcchat.php';
+
+// Load plugins files
+if ( is_admin() || ( defined( 'WP_CLI' ) && WP_CLI ) ) {
+    require_once plugin_dir_path( __FILE__ ) . 'includes/class-keenwcchat-firebase.php';
+    add_action( 'init', array( 'Firebase_Admin', 'init' ) );
+}
 
 function run_keenwcchat() {
     // load plugin for logged in users only
