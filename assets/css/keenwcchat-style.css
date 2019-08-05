@@ -188,7 +188,7 @@
 }
 
 #keenwcchat-message .emojionepicker-picker {
-    z-index: inherit !important;
+    z-index: 1 !important;
 }
 
 #keenwcchat-message .emojionepicker {
