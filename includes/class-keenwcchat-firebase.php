@@ -70,7 +70,7 @@ class Firebase_Admin{
     );
   }
 
-  /**
+/**
  * Sanitize each setting field as needed
  *
  * @param array $input Contains all settings fields as array keys
@@ -87,23 +87,9 @@ class Firebase_Admin{
       if( isset( $input['auth_domain'] ) )
           $new_input['auth_domain'] = sanitize_text_field( $input['auth_domain'] );
 
-      if( isset( $input['database_url'] ) )
-          $new_input['database_url'] = sanitize_text_field( $input['database_url'] );
-
-      if( isset( $input['project_id'] ) )
-          $new_input['project_id'] = sanitize_text_field( $input['project_id'] );
-
-      // Database
-      if( isset( $input['database_type'] ) )
-          $new_input['database_type'] = sanitize_text_field( $input['database_type'] );
-
-      if( isset( $input['collection_names'] ) )
-          $new_input['collection_names'] = sanitize_text_field( $input['collection_names'] );
-
-
       return $new_input;
   }
-
+  
   /**
    * Print the Section text
    */
