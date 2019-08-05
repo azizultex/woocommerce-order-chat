@@ -15,9 +15,9 @@ var frame;
 		// Your web app's Firebase configuration
 		var firebaseConfig = {
 			apiKey: keenwcchat.firebase.api_key,
-			authDomain: keenwcchat.firebase.auth_domain,
-			databaseURL: "https://" + keenwcchat.firebase.auth_domain +".firebaseio.com",
-			projectId: keenwcchat.firebase.auth_domain,
+			authDomain: keenwcchat.firebase.projectId + '.firebaseapp.com',
+			databaseURL: "https://" + keenwcchat.firebase.projectId +".firebaseio.com",
+			projectId: keenwcchat.firebase.projectId,
 			storageBucket: "",
 			messagingSenderId: "",
 			appId: ""

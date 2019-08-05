@@ -62,9 +62,9 @@ class Firebase_Admin{
     );
 
     add_settings_field(
-        'auth_domain', // ID
-        'Auth Domain', // Title
-        array( "Firebase_Admin", 'auth_domain_callback' ), // Callback
+        'projectId', // ID
+        'Project ID', // Title
+        array( "Firebase_Admin", 'projectId_callback' ), // Callback
         'general', // Page
         'setting_section_id' // Section
     );
@@ -84,8 +84,8 @@ class Firebase_Admin{
       if( isset( $input['api_key'] ) )
           $new_input['api_key'] = sanitize_text_field( $input['api_key'] );
 
-      if( isset( $input['auth_domain'] ) )
-          $new_input['auth_domain'] = sanitize_text_field( $input['auth_domain'] );
+      if( isset( $input['projectId'] ) )
+          $new_input['projectId'] = sanitize_text_field( $input['projectId'] );
 
       return $new_input;
   }
@@ -109,9 +109,9 @@ class Firebase_Admin{
   /**
    * Get the settings option array and print one of its values
    */
-  public static function auth_domain_callback()
+  public static function projectId_callback()
   {
-      self::print_form("auth_domain");
+      self::print_form("projectId");
   }
 
   /**
@@ -165,8 +165,8 @@ class Firebase_Admin{
         $about_class = $active_tab === 'about' ? 'nav-tab-active' : '';
 
         echo "<h2 class='nav-tab-wrapper'>";
-          echo "<a href='?page=firebase-setting&tab=general' class='nav-tab $general_class'>General</a>";
-          echo "<a href='?page=firebase-setting&tab=about' class='nav-tab $about_class'>About</a>";
+          echo "<a href='?page=wc-order-chat&tab=general' class='nav-tab $general_class'>General</a>";
+          echo "<a href='?page=wc-order-chat&tab=about' class='nav-tab $about_class'>About</a>";
         echo "</h2>";
 
         echo "<form method='post' action='options.php'>";
